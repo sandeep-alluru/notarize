@@ -1,7 +1,7 @@
-"""FastAPI REST wrapper for tracemarket.
+"""FastAPI REST wrapper for notarize.
 
-Start:   uvicorn tracemarket.api:app --reload
-Install: pip install "tracemarket[api]"
+Start:   uvicorn notarize.api:app --reload
+Install: pip install "notarize[api]"
 """
 
 from __future__ import annotations
@@ -12,23 +12,23 @@ try:
     from fastapi import FastAPI, HTTPException
     from pydantic import BaseModel, Field
 except ImportError as exc:
-    raise ImportError("API server requires: pip install 'tracemarket[api]'") from exc
+    raise ImportError("API server requires: pip install 'notarize[api]'") from exc
 
-from tracemarket import __version__
-from tracemarket.scrubber import PrivacyScrubber
-from tracemarket.store import TraceStore
-from tracemarket.trace import AgentTrace
-from tracemarket.verifier import ConsistencyVerifier
+from notarize import __version__
+from notarize.scrubber import PrivacyScrubber
+from notarize.store import TraceStore
+from notarize.trace import AgentTrace
+from notarize.verifier import ConsistencyVerifier
 
-_DEFAULT_DB = ".tracemarket/traces.db"
+_DEFAULT_DB = ".notarize/traces.db"
 
 app = FastAPI(
-    title="tracemarket API",
+    title="notarize API",
     description="Canonical trace format and verifier for agent execution attestation.",
     version=__version__,
     license_info={
         "name": "MIT",
-        "url": "https://github.com/sandeep-alluru/tracemarket/blob/main/LICENSE",
+        "url": "https://github.com/sandeep-alluru/notarize/blob/main/LICENSE",
     },
 )
 
@@ -37,7 +37,7 @@ class VerifyRequest(BaseModel):
     """Request body for POST /verify."""
 
     trace: dict[str, Any] = Field(..., description="AgentTrace as a JSON dict.")
-    db: str = Field(_DEFAULT_DB, description="Path to the tracemarket database.")
+    db: str = Field(_DEFAULT_DB, description="Path to the notarize database.")
 
 
 class ScrubRequest(BaseModel):

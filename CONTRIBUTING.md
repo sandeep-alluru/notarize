@@ -1,4 +1,4 @@
-# Contributing to tracemarket
+# Contributing to notarize
 
 Thank you for your interest in contributing. This guide covers everything you need to go from zero to a merged PR.
 
@@ -16,8 +16,8 @@ Thank you for your interest in contributing. This guide covers everything you ne
 ## Quick start
 
 ```bash
-git clone https://github.com/sandeep-alluru/tracemarket
-cd tracemarket
+git clone https://github.com/sandeep-alluru/notarize
+cd notarize
 python -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 pre-commit install
@@ -37,14 +37,14 @@ Or individually:
 ```bash
 pytest tests/ -v
 ruff check src/ tests/
-mypy src/tracemarket/
+mypy src/notarize/
 ```
 
 ## Adding a new bid strategy
 
-1. Create `src/tracemarket/strategies/{strategy_name}.py`
+1. Create `src/notarize/strategies/{strategy_name}.py`
 2. Implement a class that inherits from `BidStrategy` and implements `bid(trace: Trace, market: Market) -> Bid`
-3. Export the class from `src/tracemarket/strategies/__init__.py`
+3. Export the class from `src/notarize/strategies/__init__.py`
 4. Add tests in `tests/test_{strategy_name}_strategy.py` covering edge cases and market interactions
 5. Document the new strategy in the `## Bid strategies` section of the README
 

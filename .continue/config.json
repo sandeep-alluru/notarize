@@ -1,5 +1,5 @@
 {
-  "name": "tracemarket",
+  "name": "notarize",
   "version": "0.1.0",
   "schema": "v1",
   "context": [
@@ -8,7 +8,7 @@
   ],
   "docs": [
     {
-      "title": "tracemarket Architecture",
+      "title": "notarize Architecture",
       "startUrl": "file://./ARCHITECTURE.md",
       "faviconUrl": ""
     }
@@ -16,12 +16,12 @@
   "customCommands": [
     {
       "name": "explain",
-      "prompt": "Explain how this part of tracemarket works: {input}. Use the module map in AGENTS.md as context.",
+      "prompt": "Explain how this part of notarize works: {input}. Use the module map in AGENTS.md as context.",
       "description": "Explain a part of the codebase"
     }
   ],
   "rules": [
-    "This is tracemarket — Canonical trace format and verifier for agent execution attestation.",
+    "This is notarize — Canonical trace format and verifier for agent execution attestation.",
     "Library code must not use print() — use rich.console.Console.",
     "All public API must have type annotations and docstrings.",
     "Tests use pytest. CLI tests use click.testing.CliRunner."

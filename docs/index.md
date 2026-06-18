@@ -1,4 +1,4 @@
-# tracemarket
+# notarize
 
 **Canonical trace format and verifier for agent execution attestation**
 
@@ -10,14 +10,14 @@
 ## Install
 
 ```bash
-pip install tracemarket
+pip install notarize
 ```
 
 ## Quick example
 
 ```bash
 # TODO: add real usage example
-tracemarket --help
+notarize --help
 ```
 
 ## Why

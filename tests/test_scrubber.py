@@ -1,11 +1,11 @@
-"""Tests for PrivacyScrubber and ScrubResult from tracemarket.scrubber."""
+"""Tests for PrivacyScrubber and ScrubResult from notarize.scrubber."""
 
 from __future__ import annotations
 
 import pytest
 
-from tracemarket.scrubber import PrivacyScrubber, _scrub_text
-from tracemarket.trace import AgentTrace, TraceStep
+from notarize.scrubber import PrivacyScrubber, _scrub_text
+from notarize.trace import AgentTrace, TraceStep
 
 
 @pytest.fixture

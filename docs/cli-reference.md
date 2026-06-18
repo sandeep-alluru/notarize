@@ -1,6 +1,6 @@
 # CLI Reference
 
-## `tracemarket <command>`
+## `notarize <command>`
 
 TODO: document CLI commands and options
 

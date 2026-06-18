@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "tracemarket"
+name = "notarize"
 version = "0.1.0"
 description = "Canonical trace format and verifier for agent execution attestation"
 readme = "README.md"
@@ -46,15 +46,15 @@ mcp = ["mcp>=1.0"]
 api = ["fastapi>=0.110", "uvicorn>=0.29"]
 
 [project.scripts]
-tracemarket = "tracemarket.cli:main"
-tracemarket-mcp = "tracemarket.mcp_server:run_server"
+notarize = "notarize.cli:main"
+notarize-mcp = "notarize.mcp_server:run_server"
 
 [project.urls]
-Homepage      = "https://github.com/sandeep-alluru/tracemarket"
-Repository    = "https://github.com/sandeep-alluru/tracemarket"
-Documentation = "https://sandeep-alluru.github.io/tracemarket"
-Changelog     = "https://github.com/sandeep-alluru/tracemarket/blob/main/CHANGELOG.md"
-Issues        = "https://github.com/sandeep-alluru/tracemarket/issues"
+Homepage      = "https://github.com/sandeep-alluru/notarize"
+Repository    = "https://github.com/sandeep-alluru/notarize"
+Documentation = "https://sandeep-alluru.github.io/notarize"
+Changelog     = "https://github.com/sandeep-alluru/notarize/blob/main/CHANGELOG.md"
+Issues        = "https://github.com/sandeep-alluru/notarize/issues"
 
 [tool.ruff]
 line-length    = 100
@@ -95,10 +95,10 @@ disallow_untyped_defs    = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts   = "--cov=tracemarket --cov-report=term-missing --cov-report=xml"
+addopts   = "--cov=notarize --cov-report=term-missing --cov-report=xml"
 
 [tool.coverage.run]
-source   = ["tracemarket"]
+source   = ["notarize"]
 branch   = true
 omit     = ["*/tests/*", "*/examples/*"]
 

@@ -1,11 +1,11 @@
-# GitHub Copilot Instructions — tracemarket
+# GitHub Copilot Instructions — notarize
 
-tracemarket: Canonical trace format and verifier for agent execution attestation
+notarize: Canonical trace format and verifier for agent execution attestation
 
 ## Module map
 
 ```
-src/tracemarket/
+src/notarize/
 ├── # TODO: fill in after implementation
 ```
 
@@ -29,6 +29,6 @@ src/tracemarket/
 
 ## Adding a new adapter / integration
 
-1. Create `src/tracemarket/instrument_<framework>.py`
+1. Create `src/notarize/instrument_<framework>.py`
 2. Export from `__init__.py`, add to `__all__` alphabetically
 3. Add tests

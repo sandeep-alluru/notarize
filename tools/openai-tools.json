@@ -14,7 +14,7 @@
           },
           "db": {
             "type": "string",
-            "description": "Path to the tracemarket SQLite database for persisting the result. Defaults to .tracemarket/traces.db."
+            "description": "Path to the notarize SQLite database for persisting the result. Defaults to .notarize/traces.db."
           }
         },
         "required": ["trace", "db"],
@@ -45,14 +45,14 @@
     "type": "function",
     "function": {
       "name": "list_traces",
-      "description": "List all stored AgentTraces in the tracemarket database. Returns a list of trace metadata including trace_id, agent_name, task, step count, and created_at timestamp.",
+      "description": "List all stored AgentTraces in the notarize database. Returns a list of trace metadata including trace_id, agent_name, task, step count, and created_at timestamp.",
       "strict": true,
       "parameters": {
         "type": "object",
         "properties": {
           "db": {
             "type": "string",
-            "description": "Path to the tracemarket SQLite database. Defaults to .tracemarket/traces.db."
+            "description": "Path to the notarize SQLite database. Defaults to .notarize/traces.db."
           }
         },
         "required": ["db"],

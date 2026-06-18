@@ -1,6 +1,6 @@
 openapi: "3.1.0"
 info:
-  title: tracemarket API
+  title: notarize API
   description: Canonical trace format and verifier for agent execution attestation
   version: "0.1.0"
   contact:
@@ -8,7 +8,7 @@ info:
     email: onepuncchh@gmail.com
   license:
     name: MIT
-    url: https://github.com/sandeep-alluru/tracemarket/blob/main/LICENSE
+    url: https://github.com/sandeep-alluru/notarize/blob/main/LICENSE
 
 servers:
   - url: http://localhost:8000
@@ -51,8 +51,8 @@ paths:
                   description: AgentTrace as a JSON-compatible dict
                 db:
                   type: string
-                  description: Path to the tracemarket database
-                  default: ".tracemarket/traces.db"
+                  description: Path to the notarize database
+                  default: ".notarize/traces.db"
       responses:
         "200":
           description: Verification result
@@ -130,7 +130,7 @@ paths:
           required: false
           schema:
             type: string
-            default: ".tracemarket/traces.db"
+            default: ".notarize/traces.db"
       responses:
         "200":
           description: List of traces
@@ -159,7 +159,7 @@ paths:
           required: false
           schema:
             type: string
-            default: ".tracemarket/traces.db"
+            default: ".notarize/traces.db"
       responses:
         "200":
           description: AgentTrace

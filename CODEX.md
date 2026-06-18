@@ -1,4 +1,4 @@
-# tracemarket — Codex Developer Guide
+# notarize — Codex Developer Guide
 
 > Read by OpenAI Codex CLI. Supplements AGENTS.md with Codex-specific conventions.
 
@@ -9,7 +9,7 @@ Canonical trace format and verifier for agent execution attestation
 ## Module map
 
 ```
-src/tracemarket/
+src/notarize/
 ├── # TODO: fill in after implementation
 ```
 

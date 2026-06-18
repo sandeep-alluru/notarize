@@ -6,8 +6,8 @@ import json
 import sqlite3
 from pathlib import Path
 
-from tracemarket.trace import AgentTrace
-from tracemarket.verifier import VerificationResult
+from notarize.trace import AgentTrace
+from notarize.verifier import VerificationResult
 
 
 class TraceStore:

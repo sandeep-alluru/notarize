@@ -3,14 +3,14 @@
 ## Top-level exports
 
 ```python
-import tracemarket
+import notarize
 ```
 
 <!-- mkdocstrings will auto-generate from docstrings below -->
 
-::: tracemarket
+::: notarize
 
 <!-- TODO: add per-module sections as you implement them:
-::: tracemarket.core
-::: tracemarket.cli
+::: notarize.core
+::: notarize.cli
 -->

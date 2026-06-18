@@ -7,7 +7,7 @@ import re
 from dataclasses import dataclass
 from typing import Any
 
-from tracemarket.trace import AgentTrace
+from notarize.trace import AgentTrace
 
 
 @dataclass
@@ -107,7 +107,7 @@ class PrivacyScrubber:
 
         # Recompute the trace IDs since content changed
         # Re-build the chain by reconstructing
-        from tracemarket.trace import AgentTrace as _AgentTrace
+        from notarize.trace import AgentTrace as _AgentTrace
 
         rebuilt = _AgentTrace(
             trace_id=scrubbed.trace_id,

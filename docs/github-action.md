@@ -1,10 +1,10 @@
 # GitHub Action
 
-Use tracemarket directly in your GitHub Actions workflow:
+Use notarize directly in your GitHub Actions workflow:
 
 ```yaml
-- name: tracemarket
-  uses: sandeep-alluru/tracemarket@v0.1.0
+- name: notarize
+  uses: sandeep-alluru/notarize@v0.1.0
   with:
     # TODO: add action inputs
     fail-on-error: "true"
@@ -13,9 +13,9 @@ Use tracemarket directly in your GitHub Actions workflow:
 Or use the CLI directly:
 
 ```yaml
-- name: Install tracemarket
-  run: pip install tracemarket
+- name: Install notarize
+  run: pip install notarize
 
-- name: Run tracemarket
-  run: tracemarket --help
+- name: Run notarize
+  run: notarize --help
 ```

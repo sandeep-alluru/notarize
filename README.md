@@ -1,15 +1,15 @@
-# tracemarket
+# notarize
 
 **Canonical trace format and verifier for agent execution attestation.**
 
-![tracemarket](assets/hero.png)
+![notarize](assets/hero.png)
 
-[![CI](https://github.com/sandeep-alluru/tracemarket/actions/workflows/ci.yml/badge.svg)](https://github.com/sandeep-alluru/tracemarket/actions/workflows/ci.yml)
-[![PyPI version](https://img.shields.io/pypi/v/tracemarket.svg)](https://pypi.org/project/tracemarket/)
-[![Python 3.10+](https://img.shields.io/pypi/pyversions/tracemarket.svg)](https://pypi.org/project/tracemarket/)
-[![Downloads](https://img.shields.io/pypi/dm/tracemarket.svg)](https://pypi.org/project/tracemarket/)
+[![CI](https://github.com/sandeep-alluru/notarize/actions/workflows/ci.yml/badge.svg)](https://github.com/sandeep-alluru/notarize/actions/workflows/ci.yml)
+[![PyPI version](https://img.shields.io/pypi/v/notarize.svg)](https://pypi.org/project/notarize/)
+[![Python 3.10+](https://img.shields.io/pypi/pyversions/notarize.svg)](https://pypi.org/project/notarize/)
+[![Downloads](https://img.shields.io/pypi/dm/notarize.svg)](https://pypi.org/project/notarize/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![codecov](https://codecov.io/gh/sandeep-alluru/tracemarket/branch/main/graph/badge.svg)](https://codecov.io/gh/sandeep-alluru/tracemarket)
+[![codecov](https://codecov.io/gh/sandeep-alluru/notarize/branch/main/graph/badge.svg)](https://codecov.io/gh/sandeep-alluru/notarize)
 [![Typed](https://img.shields.io/badge/types-mypy-blue)](https://mypy-lang.org/)
 
 [Quick Start](#quick-start) · [How It Works](#how-it-works) · [CLI Reference](#cli-reference) · [GitHub Action](#github-action) · [vs. Alternatives](#vs-alternatives) · [Contributing](CONTRIBUTING.md)
@@ -22,11 +22,11 @@ AI agents produce execution traces. Those traces are the primary audit artifact 
 
 When an agent's trace is submitted for an EU AI Act audit, how do you know it hasn't been modified? How do you ensure personal data was redacted before storage? How do you verify the step sequence is internally consistent?
 
-tracemarket solves this by treating agent traces like signed commits: every step is content-addressed, steps are hash-chained, and a Merkle root seals the whole trace. Tamper any step and the verifier catches it.
+notarize solves this by treating agent traces like signed commits: every step is content-addressed, steps are hash-chained, and a Merkle root seals the whole trace. Tamper any step and the verifier catches it.
 
 ```
-tracemarket verify trace.json   # exits 1 if tampered
-tracemarket scrub trace.json    # removes PII before storage
+notarize verify trace.json   # exits 1 if tampered
+notarize scrub trace.json    # removes PII before storage
 ```
 
 ---
@@ -74,11 +74,11 @@ flowchart LR
 ## Quick Start
 
 ```bash
-pip install tracemarket
+pip install notarize
 ```
 
 ```python
-from tracemarket import AgentTrace, TraceStep, ConsistencyVerifier, PrivacyScrubber
+from notarize import AgentTrace, TraceStep, ConsistencyVerifier, PrivacyScrubber
 
 # Build a trace
 steps = [
@@ -109,7 +109,7 @@ print(scrub.replacements_count)  # 0 (no PII in this trace)
 ## CLI Reference
 
 ```bash
-tracemarket [--db PATH] COMMAND [OPTIONS]
+notarize [--db PATH] COMMAND [OPTIONS]
 ```
 
 | Command | Description | Key options |
@@ -123,38 +123,38 @@ tracemarket [--db PATH] COMMAND [OPTIONS]
 
 | Option | Default | Env var |
 |--------|---------|---------|
-| `--db PATH` | `.tracemarket/traces.db` | `TRACEMARKET_DB` |
+| `--db PATH` | `.notarize/traces.db` | `NOTARIZE_DB` |
 
 **Examples:**
 
 ```bash
 # Verify a trace
-tracemarket verify trace.json
+notarize verify trace.json
 
 # Verify and save to the database
-tracemarket verify trace.json --save
+notarize verify trace.json --save
 
 # Scrub PII and output to stdout
-tracemarket scrub trace.json
+notarize scrub trace.json
 
 # Scrub PII and save to file
-tracemarket scrub trace.json -o scrubbed.json
+notarize scrub trace.json -o scrubbed.json
 
 # List stored traces
-tracemarket log
+notarize log
 
 # Show store statistics
-tracemarket status
+notarize status
 ```
 
 ---
 
 ## GitHub Action
 
-Add tracemarket verification to your CI pipeline:
+Add notarize verification to your CI pipeline:
 
 ```yaml
-# .github/workflows/tracemarket.yml
+# .github/workflows/notarize.yml
 name: Verify agent traces
 on: [push, pull_request]
 
@@ -163,19 +163,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: sandeep-alluru/tracemarket@main
+      - uses: sandeep-alluru/notarize@main
         with:
           trace-file: traces/latest.json
           fail-on-tampered: "true"
 ```
 
-The action installs tracemarket and runs `tracemarket verify` on the specified trace file. See [docs/github-action.md](docs/github-action.md) for full documentation.
+The action installs notarize and runs `notarize verify` on the specified trace file. See [docs/github-action.md](docs/github-action.md) for full documentation.
 
 ---
 
 ## vs. Alternatives
 
-| | tracemarket | LangSmith | Arize Phoenix | Weave (W&B) | OpenTelemetry |
+| | notarize | LangSmith | Arize Phoenix | Weave (W&B) | OpenTelemetry |
 |---|---|---|---|---|---|
 | **Hash-chained steps** | Yes — tamper-evident | No | No | No | No |
 | **Merkle root attestation** | Yes | No | No | No | No |
@@ -186,24 +186,24 @@ The action installs tracemarket and runs `tracemarket verify` on the specified t
 | **Open source** | MIT | Closed | MIT | Apache 2.0 | Apache 2.0 |
 | **Primary purpose** | Trace attestation | Observability | ML monitoring | Experiment tracking | Distributed tracing |
 
-tracemarket is purpose-built for compliance audit use cases where tamper-evidence and PII handling are first-class requirements.
+notarize is purpose-built for compliance audit use cases where tamper-evidence and PII handling are first-class requirements.
 
 ---
 
 ## Claude / MCP integration
 
-tracemarket ships a Model Context Protocol server that lets Claude and other MCP-compatible agents verify and scrub traces directly:
+notarize ships a Model Context Protocol server that lets Claude and other MCP-compatible agents verify and scrub traces directly:
 
 ```bash
 # Start the MCP server
-python -m tracemarket.mcp_server
+python -m notarize.mcp_server
 
 # In your Claude Code project's .claude/settings.json:
 {
   "mcpServers": {
-    "tracemarket": {
+    "notarize": {
       "command": "python",
-      "args": ["-m", "tracemarket.mcp_server"]
+      "args": ["-m", "notarize.mcp_server"]
     }
   }
 }
@@ -215,11 +215,11 @@ Once connected, Claude can call `verify_trace`, `scrub_trace`, and `list_traces`
 
 ## OpenAI integration
 
-tracemarket exposes a FastAPI REST server compatible with OpenAI's function-calling format. The tool definitions are in [`tools/openai-tools.json`](tools/openai-tools.json) and the full API spec is in [`openapi.yaml`](openapi.yaml).
+notarize exposes a FastAPI REST server compatible with OpenAI's function-calling format. The tool definitions are in [`tools/openai-tools.json`](tools/openai-tools.json) and the full API spec is in [`openapi.yaml`](openapi.yaml).
 
 ```bash
 # Start the REST server
-uvicorn tracemarket.api:app --reload
+uvicorn notarize.api:app --reload
 
 # Pass to Codex CLI or any OpenAI-compatible agent
 codex --tools tools/openai-tools.json "Verify the latest agent trace"
@@ -232,9 +232,9 @@ Endpoints: `GET /health`, `POST /verify`, `POST /scrub`, `GET /traces`, `GET /tr
 ## Repository structure
 
 ```
-tracemarket/
+notarize/
 ├── src/
-│   └── tracemarket/
+│   └── notarize/
 │       ├── trace.py          # TraceStep, AgentTrace dataclasses + hash chain
 │       ├── verifier.py       # ConsistencyVerifier, VerificationResult
 │       ├── scrubber.py       # PrivacyScrubber, ScrubResult + PII patterns
@@ -275,4 +275,4 @@ Suggested topics for discoverability:
 
 ---
 
-[![Star History Chart](https://api.star-history.com/svg?repos=sandeep-alluru/tracemarket&type=Date)](https://star-history.com/#sandeep-alluru/tracemarket&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=sandeep-alluru/notarize&type=Date)](https://star-history.com/#sandeep-alluru/notarize&Date)

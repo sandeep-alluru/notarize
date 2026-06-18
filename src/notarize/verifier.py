@@ -6,7 +6,7 @@ import time
 from dataclasses import dataclass, field
 from typing import Any
 
-from tracemarket.trace import AgentTrace, _sha16
+from notarize.trace import AgentTrace, _sha16
 
 
 @dataclass

@@ -1,5 +1,5 @@
 """
-tracemarket demo — canonical trace format and verifier for agent execution attestation.
+notarize demo — canonical trace format and verifier for agent execution attestation.
 
 Run with: python examples/demo.py
 """
@@ -7,16 +7,16 @@ Run with: python examples/demo.py
 import shutil
 import tempfile
 
-from tracemarket.report import print_result, print_trace, to_json, to_markdown
-from tracemarket.scrubber import PrivacyScrubber
-from tracemarket.store import TraceStore
-from tracemarket.trace import AgentTrace, TraceStep
-from tracemarket.verifier import ConsistencyVerifier
+from notarize.report import print_result, print_trace, to_json, to_markdown
+from notarize.scrubber import PrivacyScrubber
+from notarize.store import TraceStore
+from notarize.trace import AgentTrace, TraceStep
+from notarize.verifier import ConsistencyVerifier
 
 tmp = tempfile.mkdtemp()
 
 try:
-    print("=== tracemarket demo ===\n")
+    print("=== notarize demo ===\n")
 
     # Step 1: Build an agent execution trace
     steps = [

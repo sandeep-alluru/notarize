@@ -1,4 +1,4 @@
-"""Tests for tracemarket.report formatters."""
+"""Tests for notarize.report formatters."""
 
 from __future__ import annotations
 
@@ -7,9 +7,9 @@ import json
 
 from rich.console import Console
 
-from tracemarket.report import print_result, print_trace, to_json, to_markdown
-from tracemarket.trace import AgentTrace, TraceStep
-from tracemarket.verifier import VerificationResult
+from notarize.report import print_result, print_trace, to_json, to_markdown
+from notarize.trace import AgentTrace, TraceStep
+from notarize.verifier import VerificationResult
 
 
 def _console(buf: io.StringIO) -> Console:
@@ -142,14 +142,14 @@ def test_to_json_empty() -> None:
 
 def test_to_markdown_empty() -> None:
     md = to_markdown([])
-    assert "tracemarket" in md
+    assert "notarize" in md
     assert "No verification results" in md
 
 
 def test_to_markdown_with_results() -> None:
     results = [_make_result("verified"), _make_result("tampered")]
     md = to_markdown(results)
-    assert "tracemarket" in md
+    assert "notarize" in md
     assert "|" in md  # has table
     assert "verified" in md
     assert "tampered" in md

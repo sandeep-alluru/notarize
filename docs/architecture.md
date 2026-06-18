@@ -1,11 +1,11 @@
 # Architecture
 
-tracemarket is a pure-Python library. Canonical trace format and verifier for agent execution attestation
+notarize is a pure-Python library. Canonical trace format and verifier for agent execution attestation
 
 ## Module map
 
 ```
-src/tracemarket/
+src/notarize/
 ├── # TODO: fill in
 ```
 

@@ -1,4 +1,4 @@
-name: tracemarket
+name: notarize
 description: "Canonical trace format and verifier for agent execution attestation"
 inputs:
   trace-file:
@@ -10,13 +10,13 @@ inputs:
     required: false
     default: "true"
   db:
-    description: "Path to the tracemarket database"
+    description: "Path to the notarize database"
     required: false
-    default: ".tracemarket/traces.db"
+    default: ".notarize/traces.db"
 runs:
   using: "composite"
   steps:
-    - name: Install tracemarket
+    - name: Install notarize
       shell: bash
       run: pip install -e "${{ github.action_path }}"
     - name: Verify agent trace
@@ -24,7 +24,7 @@ runs:
       run: |
         ARGS="--db ${{ inputs.db }}"
         if [ -f "${{ inputs.trace-file }}" ]; then
-          tracemarket $ARGS verify "${{ inputs.trace-file }}"
+          notarize $ARGS verify "${{ inputs.trace-file }}"
           EXIT=$?
           if [ "${{ inputs.fail-on-tampered }}" = "true" ] && [ $EXIT -ne 0 ]; then
             echo "::error::Trace verification failed — trace may be tampered or invalid"

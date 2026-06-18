@@ -19,8 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rich terminal output, JSON, and Markdown formatters
 - Click CLI: `verify`, `scrub`, `log`, `status` subcommands
 - FastAPI REST server: `/health`, `/verify`, `/scrub`, `/traces`, `/trace/{id}`
-- MCP server (`tracemarket-mcp`) for native Claude tool integration
+- MCP server (`notarize-mcp`) for native Claude tool integration
 - 123 unit tests, 88.6% branch coverage
 
-[Unreleased]: https://github.com/sandeep-alluru/tracemarket/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/sandeep-alluru/tracemarket/releases/tag/v0.1.0
+[Unreleased]: https://github.com/sandeep-alluru/notarize/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/sandeep-alluru/notarize/releases/tag/v0.1.0

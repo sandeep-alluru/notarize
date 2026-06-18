@@ -1,11 +1,11 @@
-# tracemarket — Windsurf Rules
+# notarize — Windsurf Rules
 
 ## Project overview
 Canonical trace format and verifier for agent execution attestation
 
 ## Module map
 ```
-src/tracemarket/
+src/notarize/
 ├── # TODO: fill in after implementation
 ```
 

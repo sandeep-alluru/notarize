@@ -1,4 +1,4 @@
-"""Tests for tracemarket FastAPI REST endpoints."""
+"""Tests for notarize FastAPI REST endpoints."""
 
 from __future__ import annotations
 
@@ -10,8 +10,8 @@ pytest.importorskip("fastapi")
 
 from fastapi.testclient import TestClient
 
-from tracemarket.api import app
-from tracemarket.trace import AgentTrace, TraceStep
+from notarize.api import app
+from notarize.trace import AgentTrace, TraceStep
 
 client = TestClient(app)
 
@@ -42,7 +42,7 @@ def test_health_returns_ok() -> None:
 
 
 def test_app_title() -> None:
-    assert app.title == "tracemarket API"
+    assert app.title == "notarize API"
 
 
 # ── /verify ───────────────────────────────────────────────────────────────────

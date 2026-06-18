@@ -23,5 +23,5 @@ response = openai.chat.completions.create(
 
 The `openapi.yaml` at repo root is a complete OpenAPI 3.1 spec.
 
-1. Deploy the server: `pip install "tracemarket[api]" && uvicorn tracemarket.api:app`
+1. Deploy the server: `pip install "notarize[api]" && uvicorn notarize.api:app`
 2. In ChatGPT → My GPTs → Create → Add actions → import from `openapi.yaml`

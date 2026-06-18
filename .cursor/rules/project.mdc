@@ -1,17 +1,17 @@
 ---
-description: tracemarket coding rules and architecture context
+description: notarize coding rules and architecture context
 globs: ["src/**/*.py", "tests/**/*.py"]
 alwaysApply: true
 ---
 
-# tracemarket — Cursor Rules
+# notarize — Cursor Rules
 
 ## What this project does
 Canonical trace format and verifier for agent execution attestation
 
 ## Module map
 ```
-src/tracemarket/
+src/notarize/
 ├── # TODO: fill in after implementation
 ```
 

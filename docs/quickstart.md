@@ -3,7 +3,7 @@
 ## Install
 
 ```bash
-pip install tracemarket
+pip install notarize
 ```
 
 ## Step 1
@@ -17,7 +17,7 @@ TODO: second step
 ## Python API
 
 ```python
-import tracemarket
+import notarize
 
 # TODO: add real API example
 ```

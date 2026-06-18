@@ -1,8 +1,8 @@
-site_name: tracemarket
+site_name: notarize
 site_description: Canonical trace format and verifier for agent execution attestation
-site_url: https://sandeep-alluru.github.io/tracemarket
-repo_url: https://github.com/sandeep-alluru/tracemarket
-repo_name: sandeep-alluru/tracemarket
+site_url: https://sandeep-alluru.github.io/notarize
+repo_url: https://github.com/sandeep-alluru/notarize
+repo_name: sandeep-alluru/notarize
 edit_uri: edit/main/docs/
 
 theme:
@@ -88,6 +88,6 @@ nav:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/sandeep-alluru/tracemarket
+      link: https://github.com/sandeep-alluru/notarize
     - icon: fontawesome/brands/python
-      link: https://pypi.org/project/tracemarket/
+      link: https://pypi.org/project/notarize/

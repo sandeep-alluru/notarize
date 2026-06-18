@@ -1,10 +1,10 @@
-"""Tests for TraceStep and AgentTrace from tracemarket.trace."""
+"""Tests for TraceStep and AgentTrace from notarize.trace."""
 
 from __future__ import annotations
 
 import time
 
-from tracemarket.trace import AgentTrace, TraceStep, _sha16
+from notarize.trace import AgentTrace, TraceStep, _sha16
 
 # ── _sha16 helper ─────────────────────────────────────────────────────────────
 

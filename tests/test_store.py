@@ -1,12 +1,12 @@
-"""Tests for TraceStore from tracemarket.store."""
+"""Tests for TraceStore from notarize.store."""
 
 from __future__ import annotations
 
 import pytest
 
-from tracemarket.store import TraceStore
-from tracemarket.trace import AgentTrace, TraceStep
-from tracemarket.verifier import ConsistencyVerifier, VerificationResult
+from notarize.store import TraceStore
+from notarize.trace import AgentTrace, TraceStep
+from notarize.verifier import ConsistencyVerifier, VerificationResult
 
 
 @pytest.fixture

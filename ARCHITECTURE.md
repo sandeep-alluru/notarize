@@ -1,6 +1,6 @@
-# tracemarket Architecture
+# notarize Architecture
 
-This document is the authoritative developer reference for tracemarket's internals. It covers the data flow, module responsibilities, key invariants, the SQLite schema, and the verification algorithm.
+This document is the authoritative developer reference for notarize's internals. It covers the data flow, module responsibilities, key invariants, the SQLite schema, and the verification algorithm.
 
 ---
 

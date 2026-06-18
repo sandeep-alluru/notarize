@@ -7,8 +7,8 @@ from pathlib import Path
 
 from click.testing import CliRunner
 
-from tracemarket.cli import main
-from tracemarket.trace import AgentTrace, TraceStep
+from notarize.cli import main
+from notarize.trace import AgentTrace, TraceStep
 
 
 def _db(tmp_path: Path) -> str:

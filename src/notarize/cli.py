@@ -1,4 +1,4 @@
-"""Command-line interface for tracemarket."""
+"""Command-line interface for notarize."""
 
 from __future__ import annotations
 
@@ -8,33 +8,33 @@ from pathlib import Path
 
 import click
 
-from tracemarket.report import print_result, to_json
-from tracemarket.scrubber import PrivacyScrubber
-from tracemarket.store import TraceStore
-from tracemarket.trace import AgentTrace
-from tracemarket.verifier import ConsistencyVerifier
+from notarize.report import print_result, to_json
+from notarize.scrubber import PrivacyScrubber
+from notarize.store import TraceStore
+from notarize.trace import AgentTrace
+from notarize.verifier import ConsistencyVerifier
 
 
 def _store(ctx: click.Context) -> TraceStore:
     """Return a TraceStore from the context or default path."""
-    db_path = ctx.obj.get("db") if ctx.obj else ".tracemarket/traces.db"
+    db_path = ctx.obj.get("db") if ctx.obj else ".notarize/traces.db"
     return TraceStore(db_path)
 
 
 @click.group()
-@click.version_option(package_name="tracemarket")
+@click.version_option(package_name="notarize")
 @click.option(
     "--db",
-    default=".tracemarket/traces.db",
+    default=".notarize/traces.db",
     show_default=True,
-    help="Path to the tracemarket database.",
-    envvar="TRACEMARKET_DB",
+    help="Path to the notarize database.",
+    envvar="NOTARIZE_DB",
 )
 @click.pass_context
 def main(ctx: click.Context, db: str) -> None:
     """Canonical trace format and verifier for agent execution attestation.
 
-    tracemarket records, verifies, and audits agent execution traces
+    notarize records, verifies, and audits agent execution traces
     for EU AI Act compliance and forensic analysis.
     """
     ctx.ensure_object(dict)
@@ -57,9 +57,9 @@ def verify(ctx: click.Context, file: str, fmt: str, save: bool) -> None:
 
     \b
     Examples:
-      tracemarket verify trace.json
-      tracemarket verify trace.json --format json
-      tracemarket verify trace.json --save
+      notarize verify trace.json
+      notarize verify trace.json --format json
+      notarize verify trace.json --save
     """
     try:
         data = json.loads(Path(file).read_text())
@@ -99,8 +99,8 @@ def scrub(ctx: click.Context, file: str, output: str) -> None:
 
     \b
     Examples:
-      tracemarket scrub trace.json
-      tracemarket scrub trace.json -o scrubbed.json
+      notarize scrub trace.json
+      notarize scrub trace.json -o scrubbed.json
     """
     try:
         data = json.loads(Path(file).read_text())
@@ -130,7 +130,7 @@ def log_cmd(ctx: click.Context) -> None:
 
     \b
     Examples:
-      tracemarket log
+      notarize log
     """
     with _store(ctx) as store:
         traces = store.list_traces()
@@ -155,13 +155,13 @@ def status(ctx: click.Context) -> None:
 
     \b
     Examples:
-      tracemarket status
+      notarize status
     """
     with _store(ctx) as store:
         traces = store.list_traces()
         results = store.list_results()
 
-    click.echo(f"Database: {ctx.obj.get('db', '.tracemarket/traces.db')}")
+    click.echo(f"Database: {ctx.obj.get('db', '.notarize/traces.db')}")
     click.echo(f"Traces stored: {len(traces)}")
     click.echo(f"Verification results stored: {len(results)}")
 

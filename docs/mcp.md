@@ -1,11 +1,11 @@
 # MCP / Claude Integration
 
-tracemarket ships an MCP server that exposes its core operations as native Claude tools.
+notarize ships an MCP server that exposes its core operations as native Claude tools.
 
 ## Install
 
 ```bash
-pip install "tracemarket[mcp]"
+pip install "notarize[mcp]"
 ```
 
 ## Add to Claude Desktop
@@ -16,8 +16,8 @@ Edit `~/.config/claude/claude_desktop_config.json` (Linux) or
 ```json
 {
   "mcpServers": {
-    "tracemarket": {
-      "command": "tracemarket-mcp"
+    "notarize": {
+      "command": "notarize-mcp"
     }
   }
 }
@@ -35,4 +35,4 @@ After cloning the repo, these project-level commands are available:
 
 ## Smithery
 
-tracemarket is listed on [smithery.ai](https://smithery.ai) — search for "tracemarket" to install with one click.
+notarize is listed on [smithery.ai](https://smithery.ai) — search for "notarize" to install with one click.

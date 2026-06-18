@@ -1,5 +1,5 @@
 """
-End-to-end smoke test for tracemarket.
+End-to-end smoke test for notarize.
 
 Simulates a user who just cloned the repo and wants to verify everything works.
 No mocking, no fixtures — real behaviour, real CLI, real HTTP server.
@@ -67,19 +67,19 @@ def run(name: str, fn):  # noqa: ANN001
 section("1. Package import")
 
 def _test_import_version():
-    import tracemarket
-    assert tracemarket.__version__, "__version__ is empty"
-    assert tracemarket.__version__ != "0.0.0"
+    import notarize
+    assert notarize.__version__, "__version__ is empty"
+    assert notarize.__version__ != "0.0.0"
 
 def _test_import_public_api():
-    from tracemarket import (
+    from notarize import (
         AgentTrace, ConsistencyVerifier, PrivacyScrubber,
         ScrubResult, TraceStep, TraceStore, VerificationResult,
     )
     assert callable(ConsistencyVerifier)
     assert callable(PrivacyScrubber)
 
-run("tracemarket package imports", _test_import_version)
+run("notarize package imports", _test_import_version)
 run("Public API (TraceStep, AgentTrace, ConsistencyVerifier, PrivacyScrubber, TraceStore)", _test_import_public_api)
 
 
@@ -88,7 +88,7 @@ run("Public API (TraceStep, AgentTrace, ConsistencyVerifier, PrivacyScrubber, Tr
 section("2. Core data model (TraceStep, AgentTrace)")
 
 def _test_tracestep_content_addressed():
-    from tracemarket.trace import TraceStep
+    from notarize.trace import TraceStep
     s1 = TraceStep(0, "tool_call:search", "found 5 results", "success")
     s2 = TraceStep(0, "tool_call:search", "found 5 results", "success")
     assert s1.id == s2.id, "Same content must produce same ID"
@@ -96,7 +96,7 @@ def _test_tracestep_content_addressed():
     assert s1.id != s3.id, "Different action must produce different ID"
 
 def _test_agenttrace_hash_chain():
-    from tracemarket.trace import AgentTrace, TraceStep
+    from notarize.trace import AgentTrace, TraceStep
     steps = [
         TraceStep(0, "action_a", "obs_a", "success"),
         TraceStep(1, "action_b", "obs_b", "success"),
@@ -108,14 +108,14 @@ def _test_agenttrace_hash_chain():
     assert steps[2].parent_id == steps[1].id, "Step 2 parent must equal step 1 id"
 
 def _test_agenttrace_merkle_root():
-    from tracemarket.trace import AgentTrace, TraceStep, _sha16
+    from notarize.trace import AgentTrace, TraceStep, _sha16
     steps = [TraceStep(0, "action", "obs", "success")]
     trace = AgentTrace("t", "agent", "task", steps)
     expected = _sha16(steps[0].id)
     assert trace.merkle_root == expected, "Merkle root must match SHA-256[:16] of sorted step IDs"
 
 def _test_agenttrace_roundtrip():
-    from tracemarket.trace import AgentTrace, TraceStep
+    from notarize.trace import AgentTrace, TraceStep
     steps = [
         TraceStep(0, "action_a", "obs_a", "success"),
         TraceStep(1, "action_b", "obs_b", "error"),
@@ -138,8 +138,8 @@ run("AgentTrace.to_dict() / from_dict() round-trip", _test_agenttrace_roundtrip)
 section("3. ConsistencyVerifier + PrivacyScrubber")
 
 def _test_verifier_valid_trace():
-    from tracemarket.trace import AgentTrace, TraceStep
-    from tracemarket.verifier import ConsistencyVerifier
+    from notarize.trace import AgentTrace, TraceStep
+    from notarize.verifier import ConsistencyVerifier
     steps = [TraceStep(i, f"action_{i}", f"obs_{i}", "success") for i in range(3)]
     trace = AgentTrace("t", "agent", "task", steps)
     result = ConsistencyVerifier().verify(trace)
@@ -147,8 +147,8 @@ def _test_verifier_valid_trace():
     assert not result.checks_failed, f"Failed checks: {result.checks_failed}"
 
 def _test_verifier_detects_tampered_chain():
-    from tracemarket.trace import AgentTrace, TraceStep
-    from tracemarket.verifier import ConsistencyVerifier
+    from notarize.trace import AgentTrace, TraceStep
+    from notarize.verifier import ConsistencyVerifier
     steps = [
         TraceStep(0, "action_a", "obs_a", "success"),
         TraceStep(1, "action_b", "obs_b", "success"),
@@ -160,8 +160,8 @@ def _test_verifier_detects_tampered_chain():
     assert "hash_chain_integrity" in result.checks_failed
 
 def _test_scrubber_removes_pii():
-    from tracemarket.scrubber import PrivacyScrubber
-    from tracemarket.trace import AgentTrace, TraceStep
+    from notarize.scrubber import PrivacyScrubber
+    from notarize.trace import AgentTrace, TraceStep
     steps = [
         TraceStep(0, "Contact user@corp.example.com", "connected to 10.0.0.1", "success"),
         TraceStep(1, "SSN is 987-65-4321", "processed", "success"),
@@ -185,9 +185,9 @@ run("PrivacyScrubber removes email, IP, SSN from trace steps", _test_scrubber_re
 section("4. Report formatters")
 
 def _test_to_json():
-    from tracemarket.report import to_json
-    from tracemarket.trace import AgentTrace, TraceStep
-    from tracemarket.verifier import ConsistencyVerifier
+    from notarize.report import to_json
+    from notarize.trace import AgentTrace, TraceStep
+    from notarize.verifier import ConsistencyVerifier
     steps = [TraceStep(0, "action", "obs", "success")]
     trace = AgentTrace("t", "agent", "task", steps)
     result = ConsistencyVerifier().verify(trace)
@@ -197,14 +197,14 @@ def _test_to_json():
     assert "result" in parsed
 
 def _test_to_markdown():
-    from tracemarket.report import to_markdown
-    from tracemarket.verifier import VerificationResult
+    from notarize.report import to_markdown
+    from notarize.verifier import VerificationResult
     results = [
         VerificationResult("t1", "verified", ["hash_chain_integrity"], [], None, 100.0),
         VerificationResult("t2", "tampered", [], ["hash_chain_integrity"], None, 101.0),
     ]
     md = to_markdown(results)
-    assert "tracemarket" in md
+    assert "notarize" in md
     assert "|" in md  # has table
     assert "tampered" in md
     assert "t1" in md
@@ -212,8 +212,8 @@ def _test_to_markdown():
 def _test_print_result():
     import io
     from rich.console import Console
-    from tracemarket.report import print_result
-    from tracemarket.verifier import VerificationResult
+    from notarize.report import print_result
+    from notarize.verifier import VerificationResult
     buf = io.StringIO()
     con = Console(file=buf, highlight=False)
     result = VerificationResult("t1", "verified", ["check_a"], [], None, 100.0)
@@ -228,44 +228,44 @@ run("print_result() outputs verdict to console", _test_print_result)
 
 # ── 5. CLI ────────────────────────────────────────────────────────────────────
 
-section("5. CLI (tracemarket)")
+section("5. CLI (notarize)")
 
 def _test_cli_help():
     r = subprocess.run(
-        [PYTHON, "-m", "tracemarket.cli", "--help"],
+        [PYTHON, "-m", "notarize.cli", "--help"],
         capture_output=True, text=True
     )
     assert r.returncode == 0
     assert len(r.stdout) > 20, "Help output is empty"
 
 def _test_cli_verify():
-    from tracemarket.trace import AgentTrace, TraceStep
+    from notarize.trace import AgentTrace, TraceStep
     with tempfile.TemporaryDirectory() as tmp:
         steps = [TraceStep(0, "action", "obs", "success")]
         trace = AgentTrace("t-cli", "agent", "task", steps)
         trace_file = Path(tmp) / "trace.json"
         trace_file.write_text(json.dumps(trace.to_dict()))
         r = subprocess.run(
-            [PYTHON, "-m", "tracemarket.cli", "verify", str(trace_file)],
+            [PYTHON, "-m", "notarize.cli", "verify", str(trace_file)],
             capture_output=True, text=True, cwd=str(REPO_ROOT)
         )
         assert r.returncode == 0, f"verify failed: {r.stderr}"
 
-run("tracemarket --help returns 0", _test_cli_help)
-run("tracemarket verify <valid trace> returns 0", _test_cli_verify)
+run("notarize --help returns 0", _test_cli_help)
+run("notarize verify <valid trace> returns 0", _test_cli_verify)
 
 
 # ── 6. FastAPI server ─────────────────────────────────────────────────────────
 
-section("6. FastAPI server (tracemarket[api])")
+section("6. FastAPI server (notarize[api])")
 
 def _test_api_import():
-    from tracemarket.api import app
-    assert app.title == "tracemarket API"
+    from notarize.api import app
+    assert app.title == "notarize API"
 
 def _test_api_health():
     from fastapi.testclient import TestClient
-    from tracemarket.api import app
+    from notarize.api import app
     client = TestClient(app)
     r = client.get("/health")
     assert r.status_code == 200
@@ -274,8 +274,8 @@ def _test_api_health():
 
 def _test_api_verify_and_scrub():
     from fastapi.testclient import TestClient
-    from tracemarket.api import app
-    from tracemarket.trace import AgentTrace, TraceStep
+    from notarize.api import app
+    from notarize.trace import AgentTrace, TraceStep
     client = TestClient(app)
     with tempfile.TemporaryDirectory() as tmp:
         db = str(Path(tmp) / "traces.db")
@@ -293,21 +293,21 @@ def _test_api_verify_and_scrub():
         assert r_scrub.status_code == 200
         assert r_scrub.json()["replacements_count"] >= 2
 
-run("tracemarket.api imports and app.title is correct", _test_api_import)
+run("notarize.api imports and app.title is correct", _test_api_import)
 run("GET /health returns {status: ok, version: ...}", _test_api_health)
 run("POST /verify + POST /scrub workflow", _test_api_verify_and_scrub)
 
 
 # ── 7. MCP server ─────────────────────────────────────────────────────────────
 
-section("7. MCP server (tracemarket[mcp])")
+section("7. MCP server (notarize[mcp])")
 
 def _test_mcp_server_importable():
-    import tracemarket.mcp_server as m
+    import notarize.mcp_server as m
     assert hasattr(m, "run_server")
 
 def _test_mcp_server_loads_cleanly():
-    import tracemarket.mcp_server  # noqa: F401
+    import notarize.mcp_server  # noqa: F401
 
 run("mcp_server.py imports without error", _test_mcp_server_importable)
 run("mcp_server module loads cleanly (no import-time crash)", _test_mcp_server_loads_cleanly)
@@ -420,7 +420,7 @@ if failed:
         print(f"    {YELLOW}→ {short}{RESET}")
     print(f"\n{YELLOW}Tip: run with --verbose for full tracebacks{RESET}")
 else:
-    print(f"{GREEN}All {total} checks passed — tracemarket is ready to ship{RESET}")
+    print(f"{GREEN}All {total} checks passed — notarize is ready to ship{RESET}")
 
 print(f"{'═'*60}\n")
 sys.exit(0 if not failed else 1)

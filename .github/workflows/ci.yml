@@ -41,7 +41,7 @@ jobs:
         run: ruff format --check src/ tests/
 
       - name: Type check
-        run: mypy src/tracemarket/ --ignore-missing-imports
+        run: mypy src/notarize/ --ignore-missing-imports
 
       - name: Test
         run: pytest tests/ -v --tb=short
@@ -68,13 +68,13 @@ jobs:
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-3.11-${{ hashFiles('pyproject.toml') }}
-      - name: Install tracemarket
+      - name: Install notarize
         run: pip install -e .
       - name: List traced bids (if DB exists)
         run: |
-          if [ -f .tracemarket/market.db ]; then
-            tracemarket log
-            tracemarket status
+          if [ -f .notarize/market.db ]; then
+            notarize log
+            notarize status
           else
             echo "No market DB — skipping trace audit."
           fi

@@ -1,10 +1,10 @@
-"""Shared pytest fixtures for tracemarket tests."""
+"""Shared pytest fixtures for notarize tests."""
 
 from __future__ import annotations
 
 import pytest
 
-from tracemarket.trace import AgentTrace, TraceStep
+from notarize.trace import AgentTrace, TraceStep
 
 
 @pytest.fixture

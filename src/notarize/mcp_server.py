@@ -1,13 +1,13 @@
-"""MCP server for tracemarket.
+"""MCP server for notarize.
 
-Start:  python -m tracemarket.mcp_server
-Or:     tracemarket-mcp
+Start:  python -m notarize.mcp_server
+Or:     notarize-mcp
 
 Add to Claude Desktop (~/.config/claude/claude_desktop_config.json):
     {
         "mcpServers": {
-            "tracemarket": {
-                "command": "tracemarket-mcp"
+            "notarize": {
+                "command": "notarize-mcp"
             }
         }
     }
@@ -29,7 +29,7 @@ def _require_mcp() -> Any:
         return mcp, types, Server
     except ImportError:
         print(
-            "MCP server requires: pip install 'tracemarket[mcp]'",
+            "MCP server requires: pip install 'notarize[mcp]'",
             file=sys.stderr,
         )
         sys.exit(1)
@@ -39,7 +39,7 @@ def run_server() -> None:
     """Start the MCP server on stdio."""
     mcp_mod, types, server_cls = _require_mcp()
 
-    server = server_cls("tracemarket")
+    server = server_cls("notarize")
 
     @server.list_tools()
     async def list_tools() -> list[types.Tool]:
@@ -80,13 +80,13 @@ def run_server() -> None:
             ),
             types.Tool(
                 name="list_traces",
-                description="List all stored AgentTraces from the tracemarket database.",
+                description="List all stored AgentTraces from the notarize database.",
                 inputSchema={
                     "type": "object",
                     "properties": {
                         "db": {
                             "type": "string",
-                            "description": "Path to the tracemarket database.",
+                            "description": "Path to the notarize database.",
                         },
                     },
                     "required": [],
@@ -96,10 +96,10 @@ def run_server() -> None:
 
     @server.call_tool()
     async def call_tool(name: str, arguments: dict[str, Any]) -> list[types.TextContent]:
-        from tracemarket.scrubber import PrivacyScrubber
-        from tracemarket.store import TraceStore
-        from tracemarket.trace import AgentTrace
-        from tracemarket.verifier import ConsistencyVerifier
+        from notarize.scrubber import PrivacyScrubber
+        from notarize.store import TraceStore
+        from notarize.trace import AgentTrace
+        from notarize.verifier import ConsistencyVerifier
 
         if name == "verify_trace":
             trace = AgentTrace.from_dict(arguments["trace"])
@@ -127,7 +127,7 @@ def run_server() -> None:
             ]
 
         if name == "list_traces":
-            db = arguments.get("db", ".tracemarket/traces.db")
+            db = arguments.get("db", ".notarize/traces.db")
             with TraceStore(db) as store:
                 traces = store.list_traces()
             return [

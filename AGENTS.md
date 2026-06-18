@@ -1,4 +1,4 @@
-# tracemarket — Agent Context
+# notarize — Agent Context
 
 This file describes the project architecture for AI coding assistants (Claude Code, Cursor, Copilot).
 
@@ -9,7 +9,7 @@ Canonical trace format and verifier for agent execution attestation
 ## Module map
 
 ```
-src/tracemarket/
+src/notarize/
 ├── # TODO: fill in module map
 ```
 
