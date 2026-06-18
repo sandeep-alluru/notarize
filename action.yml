@@ -1,0 +1,35 @@
+name: tracemarket
+description: "Canonical trace format and verifier for agent execution attestation"
+inputs:
+  trace-file:
+    description: "Path to the agent trace JSON file to verify"
+    required: false
+    default: "trace.json"
+  fail-on-tampered:
+    description: "Fail the action if the trace is tampered or invalid"
+    required: false
+    default: "true"
+  db:
+    description: "Path to the tracemarket database"
+    required: false
+    default: ".tracemarket/traces.db"
+runs:
+  using: "composite"
+  steps:
+    - name: Install tracemarket
+      shell: bash
+      run: pip install -e "${{ github.action_path }}"
+    - name: Verify agent trace
+      shell: bash
+      run: |
+        ARGS="--db ${{ inputs.db }}"
+        if [ -f "${{ inputs.trace-file }}" ]; then
+          tracemarket $ARGS verify "${{ inputs.trace-file }}"
+          EXIT=$?
+          if [ "${{ inputs.fail-on-tampered }}" = "true" ] && [ $EXIT -ne 0 ]; then
+            echo "::error::Trace verification failed — trace may be tampered or invalid"
+            exit 1
+          fi
+        else
+          echo "::warning::Trace file not found: ${{ inputs.trace-file }}"
+        fi

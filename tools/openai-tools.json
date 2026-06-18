@@ -1,0 +1,63 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "verify_trace",
+      "description": "Verify an agent execution trace for internal consistency. Checks hash chain integrity, Merkle root, monotonic step indices, duplicate IDs, and trace ID validity. Returns a VerificationResult with verdict ('verified', 'consistent', 'tampered', or 'invalid') and details of which checks passed or failed. Call this before accepting, storing, or acting on any agent trace.",
+      "strict": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "trace": {
+            "type": "object",
+            "description": "The AgentTrace as a JSON-compatible dict, as produced by AgentTrace.to_dict()."
+          },
+          "db": {
+            "type": "string",
+            "description": "Path to the tracemarket SQLite database for persisting the result. Defaults to .tracemarket/traces.db."
+          }
+        },
+        "required": ["trace", "db"],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "scrub_trace",
+      "description": "Scrub PII from an agent execution trace before storing or sharing it. Redacts email addresses, phone numbers, credit card numbers, Social Security Numbers, and IP addresses from step action, observation, and result fields. Returns the scrubbed trace along with a count of replacements and which PII patterns were found.",
+      "strict": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "trace": {
+            "type": "object",
+            "description": "The AgentTrace as a JSON-compatible dict to scrub."
+          }
+        },
+        "required": ["trace"],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "list_traces",
+      "description": "List all stored AgentTraces in the tracemarket database. Returns a list of trace metadata including trace_id, agent_name, task, step count, and created_at timestamp.",
+      "strict": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "db": {
+            "type": "string",
+            "description": "Path to the tracemarket SQLite database. Defaults to .tracemarket/traces.db."
+          }
+        },
+        "required": ["db"],
+        "additionalProperties": false
+      }
+    }
+  }
+]

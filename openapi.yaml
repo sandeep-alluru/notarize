@@ -1,0 +1,171 @@
+openapi: "3.1.0"
+info:
+  title: tracemarket API
+  description: Canonical trace format and verifier for agent execution attestation
+  version: "0.1.0"
+  contact:
+    name: Sandeep Alluru
+    email: onepuncchh@gmail.com
+  license:
+    name: MIT
+    url: https://github.com/sandeep-alluru/tracemarket/blob/main/LICENSE
+
+servers:
+  - url: http://localhost:8000
+    description: Local development server
+
+paths:
+  /health:
+    get:
+      operationId: healthCheck
+      summary: Health check
+      responses:
+        "200":
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  version:
+                    type: string
+                    example: "0.1.0"
+
+  /verify:
+    post:
+      operationId: verifyTrace
+      summary: Verify an AgentTrace for internal consistency
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [trace]
+              properties:
+                trace:
+                  type: object
+                  description: AgentTrace as a JSON-compatible dict
+                db:
+                  type: string
+                  description: Path to the tracemarket database
+                  default: ".tracemarket/traces.db"
+      responses:
+        "200":
+          description: Verification result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  trace_id:
+                    type: string
+                  verdict:
+                    type: string
+                    enum: [verified, consistent, tampered, invalid]
+                  checks_passed:
+                    type: array
+                    items:
+                      type: string
+                  checks_failed:
+                    type: array
+                    items:
+                      type: string
+                  error:
+                    type: string
+                    nullable: true
+                  timestamp:
+                    type: number
+        "422":
+          description: Invalid trace format
+
+  /scrub:
+    post:
+      operationId: scrubTrace
+      summary: Scrub PII from an AgentTrace
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [trace]
+              properties:
+                trace:
+                  type: object
+                  description: AgentTrace as a JSON-compatible dict
+      responses:
+        "200":
+          description: Scrub result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  original_trace_id:
+                    type: string
+                  scrubbed_trace:
+                    type: object
+                  replacements_count:
+                    type: integer
+                  patterns_matched:
+                    type: array
+                    items:
+                      type: string
+        "422":
+          description: Invalid trace format
+
+  /traces:
+    get:
+      operationId: listTraces
+      summary: List all stored traces
+      parameters:
+        - name: db
+          in: query
+          required: false
+          schema:
+            type: string
+            default: ".tracemarket/traces.db"
+      responses:
+        "200":
+          description: List of traces
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  traces:
+                    type: array
+                    items:
+                      type: object
+
+  /trace/{trace_id}:
+    get:
+      operationId: getTrace
+      summary: Get a specific trace by trace_id
+      parameters:
+        - name: trace_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: db
+          in: query
+          required: false
+          schema:
+            type: string
+            default: ".tracemarket/traces.db"
+      responses:
+        "200":
+          description: AgentTrace
+          content:
+            application/json:
+              schema:
+                type: object
+        "404":
+          description: Trace not found
