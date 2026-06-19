@@ -243,14 +243,13 @@ notarize ships a Model Context Protocol server that lets Claude and other MCP-co
 
 ```bash
 # Start the MCP server
-python -m notarize.mcp_server
+notarize-mcp
 
 # In your Claude Code project's .claude/settings.json:
 {
   "mcpServers": {
     "notarize": {
-      "command": "python",
-      "args": ["-m", "notarize.mcp_server"]
+      "command": "notarize-mcp"
     }
   }
 }

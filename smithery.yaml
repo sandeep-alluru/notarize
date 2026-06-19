@@ -15,4 +15,4 @@ startCommand:
     type: object
     properties: {}
   commandFunction: |-
-    (config) => ({ command: "python", args: ["-m", "notarize.mcp_server"] })
+    (config) => ({ command: "notarize-mcp" })
