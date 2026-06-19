@@ -229,6 +229,15 @@ Endpoints: `GET /health`, `POST /verify`, `POST /scrub`, `GET /traces`, `GET /tr
 
 ---
 
+## Case Studies
+
+See how teams are using notarize in production:
+
+- [HIPAA-Compliant Audit Trails for Clinical AI Agents](docs/case-studies/healthcare-hipaa-compliance.md)
+- [Rapid Forensics for an Erroneous Autonomous Trading Agent](docs/case-studies/fintech-agent-forensics.md)
+
+---
+
 ## Repository structure
 
 ```
