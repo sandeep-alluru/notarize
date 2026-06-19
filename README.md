@@ -67,7 +67,7 @@ flowchart LR
 | CLI | `verify`, `scrub`, `log`, `status` subcommands |
 | FastAPI REST server | `/verify`, `/scrub`, `/traces`, `/trace/{id}` endpoints |
 | MCP server | Model Context Protocol integration for Claude and other agents |
-| 50+ tests | Comprehensive test suite, 85%+ branch coverage |
+| 165+ tests | Comprehensive test suite, 85%+ branch coverage |
 
 ---
 
@@ -76,6 +76,8 @@ flowchart LR
 ```bash
 pip install notarize
 ```
+
+> **Debian/Ubuntu users:** if you see `ensurepip is not available` when creating a virtualenv, first run `sudo apt install python3-venv` and then re-create the virtualenv.
 
 ```python
 from notarize import AgentTrace, TraceStep, ConsistencyVerifier, PrivacyScrubber
@@ -118,6 +120,7 @@ notarize [--db PATH] COMMAND [OPTIONS]
 | `scrub FILE` | Scrub PII from a trace file | `-o OUTPUT` |
 | `log` | List all stored traces | — |
 | `status` | Show store info (trace/result counts) | — |
+| `audit FILE` | Print a human-readable audit summary (step count, tool breakdown, risk flags) | — |
 
 **Global options:**
 
@@ -145,6 +148,50 @@ notarize log
 
 # Show store statistics
 notarize status
+```
+
+---
+
+## Advanced API
+
+These functions and classes are part of the public API (exported from `notarize`) but are not shown in the Quick Start example.
+
+### Comparing two traces
+
+```python
+from notarize import compare_traces, TraceComparison
+
+comparison: TraceComparison = compare_traces(trace_a, trace_b)
+print(comparison.added_steps)    # steps in trace_b but not trace_a
+print(comparison.removed_steps)  # steps in trace_a but not trace_b
+print(comparison.changed_steps)  # StepComparison objects for differing steps
+print(comparison.is_equivalent)  # True if no structural differences
+```
+
+### Audit summaries
+
+```python
+from notarize import summarize, AuditSummary
+
+summary: AuditSummary = summarize(trace)
+print(summary.step_count)       # total number of steps
+print(summary.tool_breakdown)   # dict[tool_name, call_count]
+print(summary.risk_flags)       # list of flagged issues
+```
+
+### Export formats
+
+```python
+from notarize import to_timeline_json, to_csv, to_compliance_report
+
+# JSON timeline suitable for visualisation tools
+json_str: str = to_timeline_json(trace)
+
+# CSV export for spreadsheet analysis
+csv_str: str = to_csv(trace)
+
+# Markdown compliance report (EU AI Act / SOC 2 style)
+md_str: str = to_compliance_report(trace)
 ```
 
 ---

@@ -73,7 +73,10 @@ class ConsistencyVerifier:
     """Verifies the internal consistency of an AgentTrace.
 
     Performs the following checks:
-    1. Hash chain integrity: each step.parent_id == previous step.id
+    1. Hash chain integrity: each step's id is recomputed from its content fields
+       (step_index, action, observation, result) and compared to the stored id;
+       also each step.parent_id == previous step.id.  If either fails,
+       ``hash_chain_integrity`` is failed and ``tamper_detected`` is added.
     2. Merkle root matches recomputed value
     3. Step indices are monotonically increasing from 0
     4. No duplicate step IDs
@@ -94,23 +97,35 @@ class ConsistencyVerifier:
         error: str | None = None
 
         try:
-            # Check 1: Hash chain integrity
+            # Check 1: Hash chain integrity — two sub-checks:
+            #   (a) parent_id chain linkage
+            #   (b) each step's id matches recomputed hash of its content fields
             chain_ok = True
+            tamper_detected = False
             for i, step in enumerate(trace.steps):
+                # (a) verify parent_id linkage
                 if i == 0:
                     if step.parent_id is not None:
                         chain_ok = False
-                        break
                 else:
                     expected_parent = trace.steps[i - 1].id
                     if step.parent_id != expected_parent:
                         chain_ok = False
-                        break
+
+                # (b) recompute step.id from content fields and compare
+                expected_id = _sha16(
+                    f"{step.step_index}|{step.action}|{step.observation}|{step.result}"
+                )
+                if step.id != expected_id:
+                    chain_ok = False
+                    tamper_detected = True
 
             if chain_ok:
                 checks_passed.append("hash_chain_integrity")
             else:
                 checks_failed.append("hash_chain_integrity")
+                if tamper_detected:
+                    checks_failed.append("tamper_detected")
 
             # Check 2: Merkle root matches recomputed value
             step_ids = sorted(s.id for s in trace.steps)
