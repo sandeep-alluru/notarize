@@ -1,0 +1,18 @@
+name: notarize
+displayName: "Notarize"
+description: "Canonical trace format and tamper-proof verifier for agent execution attestation"
+license: MIT
+homepage: https://github.com/sandeep-alluru/notarize
+repository: https://github.com/sandeep-alluru/notarize
+keywords:
+  - ai-agents
+  - attestation
+  - tracing
+  - mcp
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    properties: {}
+  commandFunction: |-
+    (config) => ({ command: "python", args: ["-m", "notarize.mcp_server"] })
