@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `compare_traces()` and `TraceComparison` / `StepComparison` for step-by-step trace diffing
+- `timeline.py`: `to_csv()`, `to_timeline_json()`, `to_compliance_report()` export formats
+- `audit.py`: `AuditSummary`, `summarize()`, `summarize_session()` for compliance risk scoring
+- CLI `notarize audit <file>` command with rich and JSON output modes
+
 ## [0.1.0] - 2026-06-18
 
 ### Added

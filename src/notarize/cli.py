@@ -8,6 +8,7 @@ from pathlib import Path
 
 import click
 
+from notarize.audit import summarize
 from notarize.report import print_result, to_json
 from notarize.scrubber import PrivacyScrubber
 from notarize.store import TraceStore
@@ -171,6 +172,75 @@ def status(ctx: click.Context) -> None:
             verdicts[r.verdict] = verdicts.get(r.verdict, 0) + 1
         for verdict, count in sorted(verdicts.items()):
             click.echo(f"  {verdict}: {count}")
+
+
+@main.command("audit")
+@click.argument("file", type=click.Path(exists=True))
+@click.option(
+    "--format",
+    "fmt",
+    type=click.Choice(["rich", "json"]),
+    default="rich",
+    show_default=True,
+)
+@click.pass_context
+def audit_cmd(ctx: click.Context, file: str, fmt: str) -> None:
+    """Show an audit summary for a trace file.
+
+    \b
+    Examples:
+      notarize audit trace.json
+      notarize audit trace.json --format json
+    """
+    try:
+        data = json.loads(Path(file).read_text())
+        trace = AgentTrace.from_dict(data)
+    except (json.JSONDecodeError, KeyError, TypeError) as exc:
+        raise click.ClickException(f"Failed to parse trace file: {exc}") from exc
+
+    summary = summarize(trace)
+
+    if fmt == "json":
+        click.echo(
+            json.dumps(
+                {
+                    "session_id": summary.session_id,
+                    "agent_id": summary.agent_id,
+                    "total_steps": summary.total_steps,
+                    "duration_ms": summary.duration_ms,
+                    "tools_used": summary.tools_used,
+                    "pii_fields_scrubbed": summary.pii_fields_scrubbed,
+                    "chain_valid": summary.chain_valid,
+                    "risk_flags": summary.risk_flags,
+                    "compliance_score": summary.compliance_score,
+                },
+                indent=2,
+            )
+        )
+    else:
+        score = summary.compliance_score
+        if score >= 80:
+            score_str = click.style(f"{score:.1f}", fg="green", bold=True)
+        elif score >= 50:
+            score_str = click.style(f"{score:.1f}", fg="yellow", bold=True)
+        else:
+            score_str = click.style(f"{score:.1f}", fg="red", bold=True)
+
+        chain_str = (
+            click.style("✓ valid", fg="green")
+            if summary.chain_valid
+            else click.style("✗ broken", fg="red")
+        )
+
+        click.echo(f"Session ID      : {summary.session_id}")
+        click.echo(f"Agent           : {summary.agent_id}")
+        click.echo(f"Total steps     : {summary.total_steps}")
+        click.echo(f"Duration        : {summary.duration_ms:.1f} ms")
+        click.echo(f"Tools used      : {', '.join(summary.tools_used) or '(none)'}")
+        click.echo(f"PII scrubbed    : {summary.pii_fields_scrubbed}")
+        click.echo(f"Chain           : {chain_str}")
+        click.echo(f"Risk flags      : {', '.join(summary.risk_flags) or '(none)'}")
+        click.echo(f"Compliance score: {score_str} / 100")
 
 
 if __name__ == "__main__":
