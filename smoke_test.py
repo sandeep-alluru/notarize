@@ -13,7 +13,6 @@ Exit 0 = all passed. Exit 1 = at least one failure.
 
 from __future__ import annotations
 
-import importlib
 import json
 import subprocess
 import sys
@@ -53,7 +52,7 @@ def section(title: str) -> None:
     print(f"\n{BOLD}{title}{RESET}")
 
 
-def run(name: str, fn):  # noqa: ANN001
+def run(name: str, fn):
     try:
         fn()
         ok(name)
@@ -73,8 +72,8 @@ def _test_import_version():
 
 def _test_import_public_api():
     from notarize import (
-        AgentTrace, ConsistencyVerifier, PrivacyScrubber,
-        ScrubResult, TraceStep, TraceStore, VerificationResult,
+        ConsistencyVerifier,
+        PrivacyScrubber,
     )
     assert callable(ConsistencyVerifier)
     assert callable(PrivacyScrubber)
@@ -211,7 +210,9 @@ def _test_to_markdown():
 
 def _test_print_result():
     import io
+
     from rich.console import Console
+
     from notarize.report import print_result
     from notarize.verifier import VerificationResult
     buf = io.StringIO()
@@ -265,6 +266,7 @@ def _test_api_import():
 
 def _test_api_health():
     from fastapi.testclient import TestClient
+
     from notarize.api import app
     client = TestClient(app)
     r = client.get("/health")
@@ -274,6 +276,7 @@ def _test_api_health():
 
 def _test_api_verify_and_scrub():
     from fastapi.testclient import TestClient
+
     from notarize.api import app
     from notarize.trace import AgentTrace, TraceStep
     client = TestClient(app)
@@ -356,7 +359,7 @@ run("CODEX.md exists and non-empty", lambda: _check_file_nonempty("CODEX.md"))
 run(".github/copilot-instructions.md exists", lambda: _check_file_nonempty(".github/copilot-instructions.md"))
 def _test_cursor_rules():
     mdc_files = list((REPO_ROOT / ".cursor/rules").glob("*.mdc"))
-    assert len(mdc_files) >= 1, f"Expected ≥1 .mdc file in .cursor/rules/, found none"
+    assert len(mdc_files) >= 1, "Expected ≥1 .mdc file in .cursor/rules/, found none"
 
 run(".cursor/rules/ has at least one .mdc file", _test_cursor_rules)
 run(".windsurfrules exists", lambda: _check_file_nonempty(".windsurfrules"))

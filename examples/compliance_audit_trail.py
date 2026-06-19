@@ -7,14 +7,13 @@ The trace is scrubbed of PII (phone, email, SSN), stored in SQLite, reloaded,
 and verified for hash-chain integrity — producing a SOC2-ready audit report.
 """
 
-import tempfile
 import os
+import tempfile
 
-from notarize.trace import AgentTrace, TraceStep
-from notarize.store import TraceStore
-from notarize.verifier import ConsistencyVerifier
 from notarize.scrubber import PrivacyScrubber
-
+from notarize.store import TraceStore
+from notarize.trace import AgentTrace, TraceStep
+from notarize.verifier import ConsistencyVerifier
 
 # ---------------------------------------------------------------------------
 # 1. Build the raw (pre-scrub) trace
@@ -182,5 +181,5 @@ print(f"  Task            : {raw_trace.task}")
 print(f"  Checks passed   : {result.checks_passed}")
 print(f"  Checks failed   : {result.checks_failed}")
 print(f"  Merkle root     : {scrubbed_trace.merkle_root}")
-print(f"  Anomalies found : 1 (Step 4 — Patient P002, cardiac event)")
+print("  Anomalies found : 1 (Step 4 — Patient P002, cardiac event)")
 print("=" * 70)

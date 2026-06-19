@@ -2,12 +2,11 @@
 
 from __future__ import annotations
 
-import copy
 import re
 from dataclasses import dataclass
 from typing import Any
 
-from notarize.trace import AgentTrace
+from notarize.trace import AgentTrace, TraceStep
 
 
 @dataclass
@@ -90,31 +89,41 @@ class PrivacyScrubber:
         Returns:
             A ScrubResult containing the scrubbed trace and replacement statistics.
         """
-        scrubbed = copy.deepcopy(trace)
         total_replacements = 0
         matched_patterns: set[str] = set()
+        new_steps: list[TraceStep] = []
 
-        for step in scrubbed.steps:
+        for step in trace.steps:
+            scrubbed_fields: dict[str, str] = {}
             for field_name in ("action", "observation", "result", "tool_name"):
                 text = getattr(step, field_name)
                 if not text:
+                    scrubbed_fields[field_name] = text
                     continue
                 new_text, count, patterns = _scrub_text(text)
+                scrubbed_fields[field_name] = new_text
                 if count > 0:
-                    setattr(step, field_name, new_text)
                     total_replacements += count
                     matched_patterns.update(patterns)
 
-        # Recompute the trace IDs since content changed
-        # Re-build the chain by reconstructing
-        from notarize.trace import AgentTrace as _AgentTrace
+            # Recreate the step so __post_init__ recomputes its ID from the scrubbed content.
+            new_step = TraceStep(
+                step_index=step.step_index,
+                action=scrubbed_fields["action"],
+                observation=scrubbed_fields["observation"],
+                result=scrubbed_fields["result"],
+                tool_name=scrubbed_fields["tool_name"],
+                timestamp=step.timestamp,
+            )
+            new_steps.append(new_step)
 
-        rebuilt = _AgentTrace(
-            trace_id=scrubbed.trace_id,
-            agent_name=scrubbed.agent_name,
-            task=scrubbed.task,
-            steps=scrubbed.steps,
-            created_at=scrubbed.created_at,
+        # Rebuild the AgentTrace so that the hash chain and merkle_root are recomputed.
+        rebuilt = AgentTrace(
+            trace_id=trace.trace_id,
+            agent_name=trace.agent_name,
+            task=trace.task,
+            steps=new_steps,
+            created_at=trace.created_at,
         )
 
         return ScrubResult(

@@ -7,7 +7,7 @@ Run with: python examples/demo.py
 import shutil
 import tempfile
 
-from notarize.report import print_result, print_trace, to_json, to_markdown
+from notarize.report import to_json, to_markdown
 from notarize.scrubber import PrivacyScrubber
 from notarize.store import TraceStore
 from notarize.trace import AgentTrace, TraceStep

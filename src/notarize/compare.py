@@ -5,7 +5,7 @@ from __future__ import annotations
 import difflib
 from dataclasses import dataclass
 
-from notarize.trace import AgentTrace
+from notarize.trace import AgentTrace, TraceStep
 
 
 @dataclass
@@ -27,9 +27,9 @@ class TraceComparison:
     verdict: str  # "identical", "minor_drift", "major_divergence"
 
 
-def _step_text(step: object) -> str:
+def _step_text(step: TraceStep) -> str:
     """Concatenate action|observation|result for a step."""
-    return f"{step.action}|{step.observation}|{step.result}"  # type: ignore[union-attr]
+    return f"{step.action}|{step.observation}|{step.result}"
 
 
 def _similarity(a: str, b: str) -> float:

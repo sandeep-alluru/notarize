@@ -2,9 +2,7 @@
 
 from __future__ import annotations
 
-import pytest
-
-from notarize.compare import StepComparison, TraceComparison, compare_traces
+from notarize.compare import compare_traces
 from notarize.trace import AgentTrace, TraceStep
 
 

@@ -5,13 +5,12 @@ of $150.  We use notarize to walk the trace, pinpoint the exact step that
 introduced the error, and produce a root-cause report.
 """
 
-import tempfile
 import os
+import tempfile
 
-from notarize.trace import AgentTrace, TraceStep
 from notarize.store import TraceStore
+from notarize.trace import AgentTrace, TraceStep
 from notarize.verifier import ConsistencyVerifier
-
 
 # ---------------------------------------------------------------------------
 # 1. Reconstruct the incident trace

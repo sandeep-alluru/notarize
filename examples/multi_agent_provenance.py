@@ -9,13 +9,12 @@ backwards from ReportAgent to DataAgent to answer: "which raw data led to
 this conclusion?"
 """
 
-import tempfile
 import os
+import tempfile
 
-from notarize.trace import AgentTrace, TraceStep
 from notarize.store import TraceStore
+from notarize.trace import AgentTrace, TraceStep
 from notarize.verifier import ConsistencyVerifier
-
 
 # ---------------------------------------------------------------------------
 # 1. DataAgent — fetches raw datasets
