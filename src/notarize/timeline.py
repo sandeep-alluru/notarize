@@ -26,9 +26,7 @@ def to_csv(trace: AgentTrace) -> str:
 
         input_summary = (step.observation or "")[:80]
         output_summary = (step.result or "")[:80]
-        ts = datetime.datetime.fromtimestamp(
-            step.timestamp, tz=datetime.timezone.utc
-        ).isoformat()
+        ts = datetime.datetime.fromtimestamp(step.timestamp, tz=datetime.timezone.utc).isoformat()
 
         writer.writerow(
             [step.step_index, step.action, input_summary, output_summary, duration_ms, ts]

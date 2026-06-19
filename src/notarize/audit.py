@@ -117,8 +117,6 @@ def summarize_session(store: TraceStore, session_id: str) -> list[AuditSummary]:
     """
     all_traces = store.list_traces()
     matching = [
-        t
-        for t in all_traces
-        if t.trace_id.startswith(session_id) or t.agent_name == session_id
+        t for t in all_traces if t.trace_id.startswith(session_id) or t.agent_name == session_id
     ]
     return [summarize(t) for t in matching]
