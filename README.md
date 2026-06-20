@@ -322,6 +322,61 @@ notarize/
 
 ---
 
+## Real-World Scenario
+
+**Regulatory: Proving Agent Decisions Weren't Tampered With (EU AI Act)**
+
+A compliance auditor requests trace records for 3 loan decisions. Before submission, a bad actor modifies step 1 to hide a biased "approved" decision. notarize's Merkle-chained trace catches the tamper immediately:
+
+```python
+import json
+from notarize import AgentTrace, TraceStep, ConsistencyVerifier
+
+# --- 1. Build the original loan-decision trace ---
+steps = [
+    TraceStep(0, "risk_model:score",    "Credit score: 720, DTI: 0.28",  "approved", tool_name="risk_model"),
+    TraceStep(1, "policy_check:verify", "All policy gates passed",        "approved", tool_name="policy_check"),
+    TraceStep(2, "decision:record",     "Decision logged to ledger",      "approved", tool_name="decision"),
+]
+trace = AgentTrace(
+    trace_id="loan-audit-2025-EU-0042",
+    agent_name="loan-decision-agent",
+    task="Evaluate loan application #LN-98231 for EUR 45,000",
+    steps=steps,
+)
+
+# --- 2. Serialize to JSON (as would be stored/submitted for audit) ---
+trace_json = json.dumps(trace.to_dict(), indent=2)
+print("Original trace serialized. Merkle root:", trace.merkle_root)
+
+# --- 3. Bad actor tampers with step 1 — changes "approved" to "denied"
+#         to make it look like the agent correctly rejected the application ---
+tampered_dict = json.loads(trace_json)
+tampered_dict["steps"][1]["result"] = "denied"   # cover up the biased approval
+print("\nTampered: step 1 result changed from 'approved' -> 'denied'")
+
+# --- 4. Rebuild an AgentTrace from the tampered dict ---
+tampered_trace = AgentTrace.from_dict(tampered_dict)
+
+# --- 5. Run ConsistencyVerifier against the tampered trace ---
+result = ConsistencyVerifier().verify(tampered_trace)
+
+# --- 6. Verification fails — tamper is caught ---
+print("\nVerdict      :", result.verdict)           # "tampered"
+print("Checks failed:", result.checks_failed)
+# Example output:
+#   Verdict      : tampered
+#   Checks failed: ['hash_chain_integrity', 'tamper_detected', 'merkle_root_valid', 'trace_id_valid']
+
+assert result.verdict == "tampered", "Expected tamper to be caught!"
+assert "tamper_detected" in result.checks_failed
+print("\nAudit outcome: trace REJECTED — modification detected before regulatory submission.")
+```
+
+**What this proves:** Without notarize, audit traces are just JSON files anyone can edit. With hash-chained Merkle roots, any modification — even changing a single character — breaks the verification and is immediately detectable.
+
+---
+
 ## GitHub Topics
 
 Suggested topics for discoverability:
