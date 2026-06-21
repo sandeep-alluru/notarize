@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "notarize"
+name = "notarize-ai"
 version = "0.1.1"
 description = "Canonical trace format and verifier for agent execution attestation"
 readme = "README.md"
@@ -55,6 +55,9 @@ Repository    = "https://github.com/sandeep-alluru/notarize"
 Documentation = "https://sandeep-alluru.github.io/notarize"
 Changelog     = "https://github.com/sandeep-alluru/notarize/blob/main/CHANGELOG.md"
 Issues        = "https://github.com/sandeep-alluru/notarize/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/notarize"]
 
 [tool.ruff]
 line-length    = 100
