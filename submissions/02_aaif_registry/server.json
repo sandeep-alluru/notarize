@@ -1,0 +1,22 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.sandeep-alluru/notarize",
+  "title": "Notarize",
+  "description": "Canonical trace format and verifier for agent execution attestation",
+  "version": "0.1.2",
+  "websiteUrl": "https://github.com/sandeep-alluru/notarize",
+  "repository": {
+    "url": "https://github.com/sandeep-alluru/notarize",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "registryType": "pypi",
+      "identifier": "notarize-ai",
+      "version": "0.1.2",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}

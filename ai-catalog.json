@@ -1,0 +1,40 @@
+{
+  "$schema": "https://agenticresourcediscovery.org/schema/v1/catalog.json",
+  "version": "1.0.0",
+  "name": "Notarize",
+  "description": "Canonical trace format and verifier for agent execution attestation",
+  "publisher": {
+    "name": "Sandeep Alluru",
+    "email": "onepuncchh@gmail.com",
+    "url": "https://github.com/sandeep-alluru"
+  },
+  "tools": [
+    {
+      "id": "io.github.sandeep-alluru/notarize",
+      "name": "notarize",
+      "title": "Notarize",
+      "description": "Canonical trace format and verifier for agent execution attestation",
+      "version": "0.1.1",
+      "protocol": "mcp",
+      "transport": "stdio",
+      "install": {
+        "pypi": {
+          "package": "notarize-ai",
+          "extras": [
+            "mcp"
+          ],
+          "runtimeHint": "uvx"
+        }
+      },
+      "invocation": {
+        "command": "notarize-mcp"
+      },
+      "repository": {
+        "url": "https://github.com/sandeep-alluru/notarize",
+        "source": "github"
+      },
+      "homepage": "https://github.com/sandeep-alluru/notarize",
+      "license": "MIT"
+    }
+  ]
+}
