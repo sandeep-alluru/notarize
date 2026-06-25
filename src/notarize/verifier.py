@@ -152,8 +152,8 @@ class ConsistencyVerifier:
                 checks_failed.append("step_indices_monotonic")
 
             # Check 4: No duplicate step IDs
-            step_id_set = [s.id for s in trace.steps]
-            if len(step_id_set) == len(set(step_id_set)):
+            step_ids_list = [s.id for s in trace.steps]
+            if len(step_ids_list) == len(set(step_ids_list)):
                 checks_passed.append("no_duplicate_step_ids")
             else:
                 checks_failed.append("no_duplicate_step_ids")
