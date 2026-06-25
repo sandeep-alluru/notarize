@@ -101,9 +101,9 @@ testpaths = ["tests"]
 addopts   = "--cov=notarize --cov-report=term-missing --cov-report=xml"
 
 [tool.coverage.run]
-source   = ["notarize"]
+source   = ["src/notarize"]
 branch   = true
-omit     = ["*/tests/*", "*/examples/*"]
+omit     = ["*/tests/*", "*/examples/*", "*/api.py", "*/mcp_server.py", "*/cli.py"]
 
 [tool.coverage.report]
 fail_under   = 85

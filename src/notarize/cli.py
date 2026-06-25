@@ -23,7 +23,7 @@ def _store(ctx: click.Context) -> TraceStore:
 
 
 @click.group()
-@click.version_option(package_name="notarize")
+@click.version_option(package_name="notarize-ai")
 @click.option(
     "--db",
     default=".notarize/traces.db",

@@ -12,7 +12,7 @@ from notarize.timeline import to_compliance_report, to_csv, to_timeline_json
 from notarize.trace import AgentTrace, TraceStep
 from notarize.verifier import ConsistencyVerifier, VerificationResult
 
-__version__ = importlib.metadata.version("notarize")
+__version__ = importlib.metadata.version("notarize-ai")
 
 __all__ = [
     "AgentTrace",
