@@ -3,7 +3,7 @@
   "name": "io.github.sandeep-alluru/notarize",
   "title": "Notarize",
   "description": "Canonical trace format and verifier for agent execution attestation",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "websiteUrl": "https://github.com/sandeep-alluru/notarize",
   "repository": {
     "url": "https://github.com/sandeep-alluru/notarize",
@@ -13,7 +13,7 @@
     {
       "registryType": "pypi",
       "identifier": "notarize-ai",
-      "version": "0.1.2",
+      "version": "0.1.3",
       "transport": {
         "type": "stdio"
       }
