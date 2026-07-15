@@ -6,7 +6,9 @@ from notarize.compare import compare_traces
 from notarize.trace import AgentTrace, TraceStep
 
 
-def _make_step(index: int, action: str = "action", obs: str = "obs", result: str = "ok", tool: str = "t") -> TraceStep:
+def _make_step(
+    index: int, action: str = "action", obs: str = "obs", result: str = "ok", tool: str = "t"
+) -> TraceStep:
     return TraceStep(
         step_index=index,
         action=action,
@@ -30,7 +32,7 @@ def test_identical_traces_verdict(sample_trace: AgentTrace) -> None:
     """Two references to the same trace should be identical."""
     import copy
 
-    candidate = copy.deepcopy(sample_trace)
+    copy.deepcopy(sample_trace)
     # Re-build to ensure identical data
     candidate2 = AgentTrace(
         trace_id=sample_trace.trace_id,
@@ -170,8 +172,12 @@ def test_verdict_minor_drift() -> None:
 
 def test_verdict_major_divergence() -> None:
     """Completely different traces → major_divergence."""
-    base_steps = [_make_step(i, action="aaa" * 20, obs="bbb" * 20, result="ccc" * 20) for i in range(5)]
-    cand_steps = [_make_step(i, action="zzz" * 20, obs="yyy" * 20, result="xxx" * 20) for i in range(5)]
+    base_steps = [
+        _make_step(i, action="aaa" * 20, obs="bbb" * 20, result="ccc" * 20) for i in range(5)
+    ]
+    cand_steps = [
+        _make_step(i, action="zzz" * 20, obs="yyy" * 20, result="xxx" * 20) for i in range(5)
+    ]
 
     baseline = _make_trace("base", base_steps)
     candidate = _make_trace("cand", cand_steps)

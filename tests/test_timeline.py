@@ -43,7 +43,14 @@ def test_to_csv_columns(sample_trace: AgentTrace) -> None:
     csv_str = to_csv(sample_trace)
     reader = csv.reader(io.StringIO(csv_str))
     header = next(reader)
-    assert header == ["step_index", "action", "input_summary", "output_summary", "duration_ms", "timestamp"]
+    assert header == [
+        "step_index",
+        "action",
+        "input_summary",
+        "output_summary",
+        "duration_ms",
+        "timestamp",
+    ]
 
 
 def test_to_csv_row_count(sample_trace: AgentTrace) -> None:

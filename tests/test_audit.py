@@ -145,7 +145,9 @@ def test_summarize_many_steps_flag() -> None:
 def test_summarize_no_tools_used_flag() -> None:
     """Steps with empty tool_name should trigger no_tools_used."""
     steps = [
-        TraceStep(step_index=0, action="a", observation="b", result="c", tool_name="", timestamp=1000.0),
+        TraceStep(
+            step_index=0, action="a", observation="b", result="c", tool_name="", timestamp=1000.0
+        ),
     ]
     trace = _make_trace(steps=steps)
     result = summarize(trace)
@@ -181,7 +183,8 @@ def test_compliance_score_deductions() -> None:
 
 def test_compliance_score_clamped_to_zero() -> None:
     """Compliance score should not go below 0."""
-    # Max deductions: chain_broken(-20) + pii(-20) + long_duration(-10) + many_steps(-10) + no_tools(-10) = -70
+    # Max deductions: chain_broken(-20) + pii(-20) + long_duration(-10)
+    #                 + many_steps(-10) + no_tools(-10) = -70
     # With a very degraded trace we should hit 0 or above
     result_score = 100.0 - 20 - 20 - 10 - 10 - 10
     assert max(0.0, result_score) == 30.0
