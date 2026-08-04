@@ -44,3 +44,7 @@ Prefer small daily commits that raise scorer pillars or finish remaining checkbo
 - [x] Library closed-loop gate rejects empty traces (stricter than raw verifier)
 - [x] eagle-eyes `scripts/dogfood_verify.py` exercises real `gate_trace`
 - [ ] CI job invokes gate on every PR (next)
+
+## Auto-run 2026-08-04
+- pytest_rc: 0
+- node: clawer-samurai-2
