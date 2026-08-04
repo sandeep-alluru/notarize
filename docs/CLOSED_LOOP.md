@@ -1,6 +1,6 @@
 # Closed loop — `notarize`
 
-**Status:** stub (eagle-eyes Phase 0 / 2026-08-04)  
+**Status:** reader wired (eagle-eyes / 2026-08-04)  
 **Owner loop:** L4/L5
 
 ## Load-bearing job
@@ -9,11 +9,13 @@ Canonical hash-chained execution traces + verify
 
 ## Who reads the output?
 
-Verifier in L4/L5; audit storage rejects tampered traces
+- Library API: `notarize.gate_trace` / `assert_trace_verified` (`closed_loop.py`)
+- Underlying checks: `ConsistencyVerifier`
+- CI / eagle-eyes `dogfood_verify` act on `exit_code` (empty → FAIL_LOUD)
 
 ## What outcome changes?
 
-Fail tick if verify fails; dogfood every improve session
+Fail tick if verify fails; empty write-only log is **FAIL_LOUD** (exit 2), never silent pass
 
 ## When NOT to use (anti-ornament)
 
@@ -21,9 +23,9 @@ Write-only logging with no verify is ornament
 
 ## Non-Ornament checklist
 
-- [ ] Reader implemented in CI, gate, or eagle-eyes script
-- [ ] Empty/wrong output fails loudly
-- [ ] Not exposed as free MCP in product agents
+- [x] Reader implemented in CI, gate, or eagle-eyes script (`gate_trace` + tests)
+- [x] Empty/wrong output fails loudly (`FAIL_LOUD`, exit 2)
+- [x] Not exposed as free MCP in product agents (import/CI gate only)
 - [ ] Linked gap IDs in mem0 when improving
 
 ## Related failures (farm memory)
@@ -34,23 +36,11 @@ Write-only logging with no verify is ornament
 
 ## Daily rotation note
 
-This file exists so pillar **C (closed loop)** can rise with real wiring over time. Prefer small daily commits that move a checkbox toward done.
-
-## Auto-run 2026-08-04
-- pytest_rc: 0
-- node: clawer-samurai-2
+Prefer small daily commits that raise scorer pillars or finish remaining checkboxes.
 
 ## Reader wiring (2026-08-04)
 
 - [x] Documented load-bearing job
-- [x] eagle-eyes `scripts/dogfood_verify.py` exercises hash-chain FAIL_LOUD pattern
+- [x] Library closed-loop gate rejects empty traces (stricter than raw verifier)
+- [x] eagle-eyes `scripts/dogfood_verify.py` exercises real `gate_trace`
 - [ ] CI job invokes gate on every PR (next)
-- Auto pytest stamps recorded under eagle-eyes/state/
-
-## Auto-run 2026-08-04
-- pytest_rc: 0
-- node: clawer-samurai-2
-
-## Auto-run 2026-08-04
-- pytest_rc: 0
-- node: clawer-samurai-2
