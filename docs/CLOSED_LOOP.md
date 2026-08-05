@@ -9,13 +9,15 @@ Canonical hash-chained execution traces + verify
 
 ## Who reads the output?
 
-- Library API: `notarize.gate_trace` / `assert_trace_verified` (`closed_loop.py`)
-- Underlying checks: `ConsistencyVerifier`
+- Library API: `notarize.gate_trace` / `gate_claimed_success` / `assert_no_silent_success` (`closed_loop.py`)
+- Underlying checks: `ConsistencyVerifier` + failed/degraded step scan
 - CI / eagle-eyes `dogfood_verify` act on `exit_code` (empty → FAIL_LOUD)
 
 ## What outcome changes?
 
-Fail tick if verify fails; empty write-only log is **FAIL_LOUD** (exit 2), never silent pass
+Fail tick if verify fails; empty write-only log is **FAIL_LOUD** (exit 2), never silent pass.
+**SILENT-SUCCESS:** chain-valid traces with `error`/`degraded` steps (or claimed
+exit 0 while degraded) → **FAIL** (exit 1), never PASS.
 
 ## When NOT to use (anti-ornament)
 

@@ -5,7 +5,18 @@ from __future__ import annotations
 import importlib.metadata
 
 from notarize.audit import AuditSummary, summarize, summarize_session
-from notarize.closed_loop import ClosedLoopError, GateOutcome, assert_trace_verified, gate_trace
+from notarize.closed_loop import (
+    ClosedLoopError,
+    GateOutcome,
+    assert_no_silent_success,
+    assert_trace_verified,
+    degraded_step_indices,
+    failed_step_indices,
+    gate_claimed_success,
+    gate_trace,
+    step_is_degraded,
+    step_is_failed,
+)
 from notarize.compare import StepComparison, TraceComparison, compare_traces
 from notarize.scrubber import PrivacyScrubber, ScrubResult
 from notarize.store import TraceStore
@@ -29,9 +40,15 @@ __all__ = [
     "TraceStore",
     "VerificationResult",
     "__version__",
+    "assert_no_silent_success",
     "assert_trace_verified",
     "compare_traces",
+    "degraded_step_indices",
+    "failed_step_indices",
+    "gate_claimed_success",
     "gate_trace",
+    "step_is_degraded",
+    "step_is_failed",
     "summarize",
     "summarize_session",
     "to_compliance_report",
