@@ -49,8 +49,49 @@ not a success gate.
 
 ---
 
+## Case TRACE-COMPILE — TraceCompiler workflow mining (arXiv 2608.02680)
+
+**Source:** Track B research (`20260808T121224Z`) —
+[TraceCompiler: Skill-Guided Mining and Compilation of LLM Agent Traces](https://arxiv.org/abs/2608.02680).
+
+**What fails:**
+
+1. Agents re-discover procedures already executed; traces mix reusable structure
+   with retries, exploration, accidental ordering.
+2. “Compiled” skills claim hard ordering without **unique** producer→consumer
+   attribution (no auditable evidence).
+3. Pure residual-LLM graphs are promoted as deterministic workflows.
+
+**Product in this repo:**
+
+| Control | API |
+|---------|-----|
+| Invocation / edge types | `ToolInvocation`, `WorkflowEdge`, `CompiledWorkflow` |
+| Deterministic miner | `compile_trace_workflow` (unique copy → hard edge) |
+| Evidence check | `hard_edges_missing_evidence` |
+| Gate | `gate_compiled_workflow(...)` |
+| Raise form | `assert_compiled_workflow_ok(...)` |
+
+**Rules (load-bearing):**
+
+- Empty workflow when required → **FAIL_LOUD**
+- Hard edge without evidence tuple → **FAIL_LOUD**
+- `require_hard_edges` / `min_hard_edges` unmet → **FAIL**
+- All edges `llm_residual` → **FAIL**
+- Residual ratio > `max_residual_ratio` → **FAIL**
+- Suspected edges do **not** impose hard ordering
+- Hard edges with evidence → **PASS**
+
+**Tests:** `tests/test_trace_compile.py`
+
+**Non-Ornament:** Call `gate_compiled_workflow` before promoting a mined skill
+to production replay. Pair with `gate_claimed_success` for step honesty.
+
+---
+
 ## Related queue IDs
 
 - **SILENT-SUCCESS** — this case (P0)
+- **TRACE-COMPILE** — TraceCompiler class (this section)
 - **D-GCROOT** (groundcrew) — success with 0 files / phantom paths
 - Empty-trace FAIL_LOUD — prior closed-loop work on `gate_trace`

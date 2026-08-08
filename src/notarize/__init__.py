@@ -22,6 +22,15 @@ from notarize.scrubber import PrivacyScrubber, ScrubResult
 from notarize.store import TraceStore
 from notarize.timeline import to_compliance_report, to_csv, to_timeline_json
 from notarize.trace import AgentTrace, TraceStep
+from notarize.trace_compile import (
+    CompiledWorkflow,
+    ToolInvocation,
+    WorkflowEdge,
+    assert_compiled_workflow_ok,
+    compile_trace_workflow,
+    gate_compiled_workflow,
+    hard_edges_missing_evidence,
+)
 from notarize.verifier import ConsistencyVerifier, VerificationResult
 
 __version__ = importlib.metadata.version("notarize-ai")
@@ -30,23 +39,30 @@ __all__ = [
     "AgentTrace",
     "AuditSummary",
     "ClosedLoopError",
+    "CompiledWorkflow",
     "ConsistencyVerifier",
     "GateOutcome",
     "PrivacyScrubber",
     "ScrubResult",
     "StepComparison",
+    "ToolInvocation",
     "TraceComparison",
     "TraceStep",
     "TraceStore",
     "VerificationResult",
+    "WorkflowEdge",
     "__version__",
+    "assert_compiled_workflow_ok",
     "assert_no_silent_success",
     "assert_trace_verified",
     "compare_traces",
+    "compile_trace_workflow",
     "degraded_step_indices",
     "failed_step_indices",
     "gate_claimed_success",
+    "gate_compiled_workflow",
     "gate_trace",
+    "hard_edges_missing_evidence",
     "step_is_degraded",
     "step_is_failed",
     "summarize",
