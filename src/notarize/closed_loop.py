@@ -203,12 +203,16 @@ def _load_trace(source: AgentTrace | str | Path) -> AgentTrace:
         raise ClosedLoopError(f"trace file not found: {path}")
     # Prefer store-style loaders if present on AgentTrace
     if hasattr(AgentTrace, "load"):
-        return AgentTrace.load(path)  # type: ignore[attr-defined]
+        loaded = AgentTrace.load(path)
+        if isinstance(loaded, AgentTrace):
+            return loaded
     import json
 
     data = json.loads(path.read_text())
     if hasattr(AgentTrace, "from_dict"):
-        return AgentTrace.from_dict(data)  # type: ignore[attr-defined]
+        loaded = AgentTrace.from_dict(data)
+        if isinstance(loaded, AgentTrace):
+            return loaded
     raise ClosedLoopError("cannot load trace: no AgentTrace.load/from_dict")
 
 
