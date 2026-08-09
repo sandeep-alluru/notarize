@@ -1,4 +1,4 @@
-"""notarize — Canonical trace format and verifier for agent execution attestation"""
+"""notarize - Canonical trace format and verifier for agent execution attestation"""
 
 from __future__ import annotations
 

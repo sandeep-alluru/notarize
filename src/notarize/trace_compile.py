@@ -19,8 +19,9 @@ Non-Ornament:
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass, field
-from typing import Any, Iterable, Literal, Sequence
+from typing import Any, Literal
 
 from notarize.closed_loop import ClosedLoopError, GateOutcome
 
@@ -230,7 +231,7 @@ def compile_trace_workflow(
         for arg_name, arg_val in inv.arguments.items():
             fp = _fp(arg_val)
             if not fp:
-                # empty arg — treat as user_input residual (no hard edge)
+                # empty arg - treat as user_input residual (no hard edge)
                 residual += 1
                 edges.append(
                     WorkflowEdge(
@@ -275,7 +276,7 @@ def compile_trace_workflow(
                     )
                 )
             elif len(earlier) > 1:
-                # ambiguous — suspected, no hard ordering
+                # ambiguous - suspected, no hard ordering
                 prod_step, prod_key = earlier[0]
                 edges.append(
                     WorkflowEdge(
@@ -290,10 +291,9 @@ def compile_trace_workflow(
                     )
                 )
             else:
-                # no producer — constant if short literal-like, else llm residual
-                is_const = (
-                    isinstance(arg_val, (int, float, bool))
-                    or (isinstance(arg_val, str) and len(arg_val) < 40 and " " not in arg_val.strip())
+                # no producer - constant if short literal-like, else llm residual
+                is_const = isinstance(arg_val, (int, float, bool)) or (
+                    isinstance(arg_val, str) and len(arg_val) < 40 and " " not in arg_val.strip()
                 )
                 if is_const:
                     edges.append(
@@ -346,9 +346,12 @@ def hard_edges_missing_evidence(edges: Sequence[WorkflowEdge]) -> list[WorkflowE
     for e in edges:
         if e.strength != "hard":
             continue
-        if not e.evidence or not e.producer_step or not e.consumer_step:
-            bad.append(e)
-        elif not e.value_fingerprint and e.binding == "copied_output":
+        if (
+            not e.evidence
+            or not e.producer_step
+            or not e.consumer_step
+            or (not e.value_fingerprint and e.binding == "copied_output")
+        ):
             bad.append(e)
     return bad
 
@@ -421,7 +424,7 @@ def gate_compiled_workflow(
             ok=False,
             verdict="FAIL_LOUD",
             reason=(
-                "TRACE-COMPILE: no compiled workflow — cannot promote empty "
+                "TRACE-COMPILE: no compiled workflow - cannot promote empty "
                 "trace mining as a skill/workflow (arXiv 2608.02680)"
             ),
             exit_code=2,
@@ -443,7 +446,7 @@ def gate_compiled_workflow(
                 verdict="FAIL_LOUD",
                 reason=(
                     f"TRACE-COMPILE: {len(bad)} hard edge(s) lack auditable evidence "
-                    f"(producer/consumer/fingerprint) — refuse unattested ordering "
+                    f"(producer/consumer/fingerprint) - refuse unattested ordering "
                     f"ids={[f'{b.producer_step}->{b.consumer_step}' for b in bad[:6]]}"
                 ),
                 exit_code=2,
@@ -455,7 +458,7 @@ def gate_compiled_workflow(
             verdict="FAIL",
             reason=(
                 f"TRACE-COMPILE: hard_edge_count={wf.hard_edge_count} < "
-                f"required={max(min_hard_edges, 1)} — workflow has no unique "
+                f"required={max(min_hard_edges, 1)} - workflow has no unique "
                 "producer→consumer attributions (mostly noise/retries)"
             ),
             exit_code=1,
@@ -480,7 +483,7 @@ def gate_compiled_workflow(
                 ok=False,
                 verdict="FAIL",
                 reason=(
-                    "TRACE-COMPILE: all edges are llm_residual — compiled workflow "
+                    "TRACE-COMPILE: all edges are llm_residual - compiled workflow "
                     "is not mostly-deterministic; refuse promotion to replay skill "
                     "(TraceCompiler residual class)"
                 ),

@@ -1,4 +1,4 @@
-"""AuditSummary — aggregate compliance and risk analysis for a trace."""
+"""AuditSummary - aggregate compliance and risk analysis for a trace."""
 
 from __future__ import annotations
 
@@ -50,7 +50,7 @@ def summarize(trace: AgentTrace) -> AuditSummary:
             seen.add(name)
             tools_used.append(name)
 
-    # PII count — sum replacements across all text fields in all steps
+    # PII count - sum replacements across all text fields in all steps
     pii_fields_scrubbed = 0
     for step in steps:
         for text in (step.action, step.observation, step.result, step.tool_name):

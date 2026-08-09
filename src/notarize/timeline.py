@@ -91,7 +91,7 @@ def to_compliance_report(trace: AgentTrace, standard: str = "SOC2") -> str:
     lines: list[str] = []
 
     # Title
-    lines.append(f"# {standard} Compliance Report — Trace {trace.trace_id}")
+    lines.append(f"# {standard} Compliance Report - Trace {trace.trace_id}")
     lines.append("")
 
     # Metadata
@@ -183,7 +183,7 @@ def to_compliance_report(trace: AgentTrace, standard: str = "SOC2") -> str:
     lines.append("| Step | Action | Tool | Result |")
     lines.append("|---|---|---|---|")
     for step in trace.steps:
-        tool = step.tool_name or "—"
+        tool = step.tool_name or "-"
         lines.append(f"| {step.step_index} | {step.action} | {tool} | {step.result} |")
     lines.append("")
 

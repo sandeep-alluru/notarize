@@ -1,7 +1,7 @@
-"""SILENT-SUCCESS — exit 0 / success claim with degraded or failed steps.
+"""SILENT-SUCCESS - exit 0 / success claim with degraded or failed steps.
 
 Farm: assemble exits 0 degraded (Foundry-class).
-Public: DiagChain / MAFIA — audit trails must not rubber-stamp bad runs.
+Public: DiagChain / MAFIA - audit trails must not rubber-stamp bad runs.
 """
 
 from __future__ import annotations
@@ -22,10 +22,7 @@ from notarize.trace import AgentTrace, TraceStep
 
 
 def _trace(results: list[str], *, trace_id: str = "ss-001") -> AgentTrace:
-    steps = [
-        TraceStep(i, f"tool_call:step{i}", f"obs{i}", r)
-        for i, r in enumerate(results)
-    ]
+    steps = [TraceStep(i, f"tool_call:step{i}", f"obs{i}", r) for i, r in enumerate(results)]
     return AgentTrace(trace_id, "agent", "assemble episode", steps, created_at=1000.0)
 
 
@@ -87,7 +84,7 @@ def test_clean_trace_still_passes() -> None:
 
 
 def test_claimed_success_exit_0_with_degraded_fails() -> None:
-    """Assemble exits 0 degraded — the load-bearing SILENT-SUCCESS fixture."""
+    """Assemble exits 0 degraded - the load-bearing SILENT-SUCCESS fixture."""
     t = _trace(["success", "degraded", "success"], trace_id="assemble-degraded")
     out = gate_claimed_success(claimed_ok=True, claimed_exit_code=0, trace=t)
     assert out.ok is False
@@ -122,7 +119,7 @@ def test_claimed_failure_with_failed_steps_is_aligned() -> None:
 
 def test_assert_no_silent_success_raises() -> None:
     t = _trace(["degraded"])
-    with pytest.raises(ClosedLoopError, match="SILENT-SUCCESS|FAIL"):
+    with pytest.raises(ClosedLoopError, match=r"SILENT-SUCCESS|FAIL"):
         assert_no_silent_success(True, 0, t)
 
 

@@ -1,4 +1,4 @@
-"""TRACE-COMPILE — TraceCompiler workflow mining (arXiv 2608.02680).
+"""TRACE-COMPILE - TraceCompiler workflow mining (arXiv 2608.02680).
 
 Hard edges require unique producer→consumer attribution + evidence.
 Suspected edges impose no ordering. Pure residual-LLM workflows fail gate.
@@ -116,8 +116,8 @@ def test_gate_all_llm_residual_fails() -> None:
 
 def test_gate_from_invocations_passes() -> None:
     invs = [
-        {"step_id": "1", "tool": "list", "outputs": {"path": "/tmp/a"}},
-        {"step_id": "2", "tool": "read", "arguments": {"path": "/tmp/a"}, "outputs": {"n": 3}},
+        {"step_id": "1", "tool": "list", "outputs": {"path": "out/a"}},
+        {"step_id": "2", "tool": "read", "arguments": {"path": "out/a"}, "outputs": {"n": 3}},
         {
             "step_id": "3",
             "tool": "sum",
@@ -154,9 +154,7 @@ def test_suspected_only_ok_when_hard_not_required() -> None:
 
 
 def test_hard_edges_missing_evidence_helper() -> None:
-    good = WorkflowEdge(
-        "p", "c", "k", "a", "copied_output", "hard", ("e1",), "v"
-    )
+    good = WorkflowEdge("p", "c", "k", "a", "copied_output", "hard", ("e1",), "v")
     bad = WorkflowEdge("p", "c", "k", "a", "copied_output", "hard", (), "v")
     assert hard_edges_missing_evidence([good]) == []
     assert len(hard_edges_missing_evidence([bad])) == 1

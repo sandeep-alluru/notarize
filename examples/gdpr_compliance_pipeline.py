@@ -297,7 +297,7 @@ try:
 
     tamper_result = verifier.verify(tampered)
     print()
-    print(f"  After tampering step 3 result 'declined' → 'approved':")
+    print("  After tampering step 3 result 'declined' → 'approved':")
     print(f"  Tampered trace verdict   : {tamper_result.verdict.upper()}")
     print(f"  Checks failed            : {', '.join(tamper_result.checks_failed)}")
     print()

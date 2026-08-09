@@ -24,12 +24,11 @@ from __future__ import annotations
 
 import tempfile
 
+from notarize.report import to_json
 from notarize.scrubber import PrivacyScrubber
 from notarize.store import TraceStore
 from notarize.trace import AgentTrace, TraceStep
 from notarize.verifier import ConsistencyVerifier
-from notarize.report import to_json
-
 
 # ── Pipeline configuration ────────────────────────────────────────────────────
 
@@ -71,7 +70,7 @@ def main() -> None:
             result="success",
             tool_name="claude-sonnet-4-6",
         ))
-        print(f"  ✓ Draft generated — 1 247 words, model: claude-sonnet-4-6")
+        print("  ✓ Draft generated — 1 247 words, model: claude-sonnet-4-6")
 
         # ── Stage 1: Human review ─────────────────────────────────────────────
         hr()
@@ -89,7 +88,7 @@ def main() -> None:
             result="success",
             tool_name="editorial-cms",
         ))
-        print(f"  ✓ Human review complete — 3 edits, approved")
+        print("  ✓ Human review complete — 3 edits, approved")
         print(f"    Reviewer: {REVIEWER_EMAIL}  (will be scrubbed for public trace)")
 
         # ── Stage 2: Compliance check ─────────────────────────────────────────

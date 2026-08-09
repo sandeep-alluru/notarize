@@ -153,7 +153,7 @@ def to_markdown(results: list[VerificationResult]) -> str:
     lines = [
         "## notarize verification report",
         "",
-        f"{status} **{len(verified)}/{len(results)} verified** — "
+        f"{status} **{len(verified)}/{len(results)} verified** - "
         f"{len(tampered)} tampered, {len(invalid)} invalid.",
         "",
         "| Trace ID | Verdict | Checks Passed | Checks Failed |",

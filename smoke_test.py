@@ -101,7 +101,7 @@ def _test_agenttrace_hash_chain():
         TraceStep(1, "action_b", "obs_b", "success"),
         TraceStep(2, "action_c", "obs_c", "success"),
     ]
-    trace = AgentTrace("t", "agent", "task", steps)
+    AgentTrace("t", "agent", "task", steps)
     assert steps[0].parent_id is None, "First step must have no parent"
     assert steps[1].parent_id == steps[0].id, "Step 1 parent must equal step 0 id"
     assert steps[2].parent_id == steps[1].id, "Step 2 parent must equal step 1 id"

@@ -64,7 +64,7 @@ def test_verification_result_repr() -> None:
     assert "verified" in repr(r)
 
 
-# ── ConsistencyVerifier — happy path ─────────────────────────────────────────
+# ── ConsistencyVerifier - happy path ─────────────────────────────────────────
 
 
 def test_verify_valid_trace_returns_verified(
@@ -100,7 +100,7 @@ def test_verify_single_step_trace(verifier: ConsistencyVerifier) -> None:
     assert steps[0].parent_id is None
 
 
-# ── ConsistencyVerifier — tampered hash chain ─────────────────────────────────
+# ── ConsistencyVerifier - tampered hash chain ─────────────────────────────────
 
 
 def test_verify_detects_broken_hash_chain(verifier: ConsistencyVerifier) -> None:
@@ -127,7 +127,7 @@ def test_verify_detects_wrong_merkle_root(verifier: ConsistencyVerifier) -> None
     assert "merkle_root_valid" in result.checks_failed
 
 
-# ── ConsistencyVerifier — non-monotonic indices ───────────────────────────────
+# ── ConsistencyVerifier - non-monotonic indices ───────────────────────────────
 
 
 def test_verify_detects_non_monotonic_indices(verifier: ConsistencyVerifier) -> None:
@@ -138,7 +138,7 @@ def test_verify_detects_non_monotonic_indices(verifier: ConsistencyVerifier) -> 
     ]
     # Build trace normally (chain is valid), then corrupt step_index
     trace = AgentTrace("tid", "agent", "task", steps, created_at=0.0)
-    # Actually steps are [0,5] — let's manually set indices after creation
+    # Actually steps are [0,5] - let's manually set indices after creation
     result = verifier.verify(trace)
     # step indices [0, 5] are not monotonic +1
     assert "step_indices_monotonic" in result.checks_failed
@@ -152,11 +152,11 @@ def test_verify_detects_first_index_not_zero(verifier: ConsistencyVerifier) -> N
     assert "step_indices_monotonic" in result.checks_failed
 
 
-# ── ConsistencyVerifier — duplicate IDs ──────────────────────────────────────
+# ── ConsistencyVerifier - duplicate IDs ──────────────────────────────────────
 
 
 def test_verify_detects_duplicate_step_ids(verifier: ConsistencyVerifier) -> None:
-    """Two steps with same content will have same id — that's a duplicate."""
+    """Two steps with same content will have same id - that's a duplicate."""
     step_a = TraceStep(0, "same_action", "same_obs", "success")
     step_b = TraceStep(1, "same_action", "same_obs", "success")
     # They have the same id because same content (different step_index means different id)
@@ -169,7 +169,7 @@ def test_verify_detects_duplicate_step_ids(verifier: ConsistencyVerifier) -> Non
     assert "no_duplicate_step_ids" in result.checks_failed
 
 
-# ── ConsistencyVerifier — trace id mismatch ──────────────────────────────────
+# ── ConsistencyVerifier - trace id mismatch ──────────────────────────────────
 
 
 def test_verify_detects_invalid_trace_id(verifier: ConsistencyVerifier) -> None:
@@ -180,7 +180,7 @@ def test_verify_detects_invalid_trace_id(verifier: ConsistencyVerifier) -> None:
     assert "trace_id_valid" in result.checks_failed
 
 
-# ── ConsistencyVerifier — result metadata ────────────────────────────────────
+# ── ConsistencyVerifier - result metadata ────────────────────────────────────
 
 
 def test_verify_result_has_trace_id(verifier: ConsistencyVerifier, valid_trace: AgentTrace) -> None:

@@ -2,7 +2,7 @@
 
 Who reads the output?
   CI, eagle-eyes ``dogfood_verify``, L4/L5 verifiers that must act on
-  tamper or empty traces — never write-only logging.
+  tamper or empty traces - never write-only logging.
 
 What outcome changes?
   Structured ``GateOutcome`` with ``exit_code`` for ``sys.exit``.
@@ -11,7 +11,7 @@ What outcome changes?
 SILENT-SUCCESS (farm / Foundry assemble class):
   A process that exits 0 or claims ``success=True`` while the execution
   trace contains failed or *degraded* steps is a silent success. Hash-chain
-  integrity alone is not enough — integrators must refuse degraded outcomes.
+  integrity alone is not enough - integrators must refuse degraded outcomes.
 
 Note:
   :class:`~notarize.verifier.ConsistencyVerifier` treats empty traces as
@@ -22,9 +22,10 @@ Note:
 from __future__ import annotations
 
 import re
+from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 from notarize.trace import AgentTrace, TraceStep
 from notarize.verifier import ConsistencyVerifier, VerificationResult
@@ -224,18 +225,18 @@ def gate_trace(
         trace: :class:`AgentTrace` or path to a serialised trace.
         verifier: Optional verifier instance (defaults to a new one).
         refuse_degraded: If True (default), degraded/partial steps → FAIL
-            (SILENT-SUCCESS class — clean chain must not hide soft failure).
+            (SILENT-SUCCESS class - clean chain must not hide soft failure).
         refuse_failed_steps: If True (default), any hard-failure step → FAIL
             even when the chain hashes correctly.
 
     Returns:
-        :class:`GateOutcome` — callers should ``sys.exit(outcome.exit_code)``.
+        :class:`GateOutcome` - callers should ``sys.exit(outcome.exit_code)``.
     """
     try:
         t = _load_trace(trace)
     except ClosedLoopError as exc:
         return _fail_loud(str(exc))
-    except Exception as exc:  # noqa: BLE001 — surface load errors as FAIL_LOUD
+    except Exception as exc:
         return _fail_loud(f"trace load failed: {exc.__class__.__name__}: {exc}")
 
     tid = getattr(t, "trace_id", None) or getattr(t, "id", None)
@@ -244,7 +245,7 @@ def gate_trace(
     if steps is None:
         return _fail_loud("trace has no steps attribute", tid)
     if len(steps) == 0:
-        return _fail_loud("empty trace — write-only empty log is ornament", tid)
+        return _fail_loud("empty trace - write-only empty log is ornament", tid)
 
     failed_ix = failed_step_indices(t)
     degraded_ix = degraded_step_indices(t)
@@ -252,24 +253,23 @@ def gate_trace(
     v = verifier or ConsistencyVerifier()
     try:
         result = v.verify(t)
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         return _fail_loud(f"verify raised: {exc.__class__.__name__}: {exc}", tid)
 
     if result.verdict not in {"verified", "consistent"}:
         return _fail(
-            f"verdict={result.verdict} failed={result.checks_failed} "
-            f"error={result.error!r}",
+            f"verdict={result.verdict} failed={result.checks_failed} error={result.error!r}",
             tid,
             verification=result,
             failed=failed_ix,
             degraded=degraded_ix,
         )
 
-    # Chain is intact — still refuse failed / degraded steps (SILENT-SUCCESS).
+    # Chain is intact - still refuse failed / degraded steps (SILENT-SUCCESS).
     if refuse_failed_steps and failed_ix:
         return _fail(
             f"SILENT-SUCCESS: chain verified but failed steps at {failed_ix} "
-            f"— refuse success (assemble/exit-0 degraded class)",
+            f"- refuse success (assemble/exit-0 degraded class)",
             tid,
             verification=result,
             failed=failed_ix,
@@ -280,7 +280,7 @@ def gate_trace(
     if refuse_degraded and degraded_ix:
         return _fail(
             f"SILENT-SUCCESS: chain verified but degraded steps at {degraded_ix} "
-            f"— refuse clean PASS",
+            f"- refuse clean PASS",
             tid,
             verification=result,
             failed=failed_ix,
@@ -334,7 +334,7 @@ def gate_claimed_success(
     )
 
     if not claim_success:
-        # Process already admitted failure — surface integrity issues first.
+        # Process already admitted failure - surface integrity issues first.
         if base.verdict == "FAIL_LOUD":
             return base
         if base.silent_success or base.failed_step_indices or base.degraded_step_indices:
@@ -364,7 +364,7 @@ def gate_claimed_success(
             trace_id=base.trace_id,
         )
 
-    # Claimed success — base already fails on silent success / empty / tamper.
+    # Claimed success - base already fails on silent success / empty / tamper.
     if not base.ok:
         # Escalate reason if claim was success
         if base.silent_success or base.failed_step_indices or base.degraded_step_indices:
@@ -387,10 +387,7 @@ def gate_claimed_success(
     return GateOutcome(
         ok=True,
         verdict="PASS",
-        reason=(
-            f"claimed success matches clean verified trace "
-            f"(exit={claimed_exit_code})"
-        ),
+        reason=(f"claimed success matches clean verified trace (exit={claimed_exit_code})"),
         exit_code=0,
         verification=base.verification,
         trace_id=base.trace_id,

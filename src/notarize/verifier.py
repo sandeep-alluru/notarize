@@ -97,7 +97,7 @@ class ConsistencyVerifier:
         error: str | None = None
 
         try:
-            # Check 1: Hash chain integrity — two sub-checks:
+            # Check 1: Hash chain integrity - two sub-checks:
             #   (a) parent_id chain linkage
             #   (b) each step's id matches recomputed hash of its content fields
             chain_ok = True
