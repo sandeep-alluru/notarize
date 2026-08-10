@@ -89,9 +89,50 @@ to production replay. Pair with `gate_claimed_success` for step honesty.
 
 ---
 
+## Case TRIAGE-SPLIT — multi-agent audit capacity / bias (arXiv 2608.06949)
+
+**Source:** Track B research (`20260810T201238Z`) —
+[Does Splitting a Triage Decision Across Agents Hide Bias or Help Catch
+It?](https://arxiv.org/abs/2608.06949v1).
+
+**What fails:**
+
+1. Life/resource allocation is split across assessment → allocation → audit,
+   but **audit is missing** or **non-independent**.
+2. Same agent collapses multiple roles; bias is not caught.
+3. Clinically identical paired cases diverge only on demographics while the
+   pipeline still claims “audited fair”.
+4. `gate_claimed_success` checks step honesty, not **pipeline role integrity**.
+
+**Product in this repo:**
+
+| Control | API |
+|---------|-----|
+| Stage / pair types | `TriageStage`, `PairedTriageCase` |
+| Analyzer | `analyze_triage_pipeline` → `TriageAuditReport` |
+| Gate | `gate_triage_audit(...)` |
+| Raise form | `assert_triage_audit_ok` |
+
+**Rules (load-bearing):**
+
+- claim audited + empty stages → **FAIL_LOUD**
+- missing assessment/allocation/audit roles when claiming full pipeline → **FAIL**
+- allocation without audit stage → **FAIL**
+- non-independent / same-agent role collapse → **FAIL**
+- clinically identical demographic pairs with different decisions → **FAIL**
+- independent full pipeline + consistent pairs → **PASS**
+
+**Tests:** `tests/test_triage_audit.py`
+
+**Non-Ornament:** Call `gate_triage_audit` before accepting multi-agent
+resource-allocation outcomes as audited. Pair with `gate_claimed_success`.
+
+---
+
 ## Related queue IDs
 
-- **SILENT-SUCCESS** — this case (P0)
-- **TRACE-COMPILE** — TraceCompiler class (this section)
+- **SILENT-SUCCESS** — degraded/failed steps claim success (P0)
+- **TRACE-COMPILE** — TraceCompiler class
+- **TRIAGE-SPLIT** — multi-agent audit capacity / bias (this section)
 - **D-GCROOT** (groundcrew) — success with 0 files / phantom paths
 - Empty-trace FAIL_LOUD — prior closed-loop work on `gate_trace`

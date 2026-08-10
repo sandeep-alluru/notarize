@@ -31,6 +31,14 @@ from notarize.trace_compile import (
     gate_compiled_workflow,
     hard_edges_missing_evidence,
 )
+from notarize.triage_audit import (
+    PairedTriageCase,
+    TriageAuditReport,
+    TriageStage,
+    analyze_triage_pipeline,
+    assert_triage_audit_ok,
+    gate_triage_audit,
+)
 from notarize.verifier import ConsistencyVerifier, VerificationResult
 
 __version__ = importlib.metadata.version("notarize-ai")
@@ -42,6 +50,7 @@ __all__ = [
     "CompiledWorkflow",
     "ConsistencyVerifier",
     "GateOutcome",
+    "PairedTriageCase",
     "PrivacyScrubber",
     "ScrubResult",
     "StepComparison",
@@ -49,12 +58,16 @@ __all__ = [
     "TraceComparison",
     "TraceStep",
     "TraceStore",
+    "TriageAuditReport",
+    "TriageStage",
     "VerificationResult",
     "WorkflowEdge",
     "__version__",
+    "analyze_triage_pipeline",
     "assert_compiled_workflow_ok",
     "assert_no_silent_success",
     "assert_trace_verified",
+    "assert_triage_audit_ok",
     "compare_traces",
     "compile_trace_workflow",
     "degraded_step_indices",
@@ -62,6 +75,7 @@ __all__ = [
     "gate_claimed_success",
     "gate_compiled_workflow",
     "gate_trace",
+    "gate_triage_audit",
     "hard_edges_missing_evidence",
     "step_is_degraded",
     "step_is_failed",
