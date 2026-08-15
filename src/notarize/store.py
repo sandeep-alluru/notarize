@@ -6,7 +6,7 @@ import json
 import sqlite3
 from pathlib import Path
 
-from notarize.paths import ensure_parent_dir, safe_db_path
+from notarize.paths import connect_sqlite, ensure_parent_dir, resolve_store_path
 from notarize.trace import AgentTrace
 from notarize.verifier import VerificationResult
 
@@ -41,10 +41,10 @@ class TraceStore:
     """
 
     def __init__(self, path: str | Path) -> None:
-        confined = safe_db_path(path, env_var="NOTARIZE_DATA_DIR", default_name="traces.db")
-        ensure_parent_dir(confined)
-        self.path = Path(confined)
-        self._conn = sqlite3.connect(confined)
+        full, base = resolve_store_path(path, env_var="NOTARIZE_DATA_DIR", default_name="traces.db")
+        ensure_parent_dir(full, base)
+        self.path = Path(full)
+        self._conn = connect_sqlite(full, base)
         self._conn.row_factory = sqlite3.Row
         self._conn.executescript(self._SCHEMA)
         self._conn.commit()
