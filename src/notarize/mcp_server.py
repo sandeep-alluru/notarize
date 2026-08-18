@@ -46,8 +46,7 @@ def run_server() -> None:
             _mcp_types.Tool(
                 name="verify_trace",
                 description=(
-                    "Verify an AgentTrace JSON dict for internal consistency. "
-                    "Returns a VerificationResult with verdict and check details."
+                    "Verify integrity/authenticity of an agent trace against notarize records. Use before trusting a trace for audit or replay. Returns pass/fail details. Use scrub_trace to remove sensitive fields first if needed."
                 ),
                 inputSchema={
                     "type": "object",
@@ -63,8 +62,7 @@ def run_server() -> None:
             _mcp_types.Tool(
                 name="scrub_trace",
                 description=(
-                    "Scrub PII from an AgentTrace. "
-                    "Replaces emails, phone numbers, credit cards, SSNs, and IPs."
+                    "Remove or redact sensitive fields from an agent trace before sharing or storage. Use prior to verify_trace or export when PII/secrets may be present. Mutates a scrubbed copy — original handling depends on arguments."
                 ),
                 inputSchema={
                     "type": "object",
@@ -79,7 +77,9 @@ def run_server() -> None:
             ),
             _mcp_types.Tool(
                 name="list_traces",
-                description="List all stored AgentTraces from the notarize database.",
+                description=(
+                    "List notarized traces available in the store. Use to discover trace ids before verify_trace or scrub_trace. Read-only."
+                ),
                 inputSchema={
                     "type": "object",
                     "properties": {
